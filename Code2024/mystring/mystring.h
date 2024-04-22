@@ -3,13 +3,19 @@
 #include <iostream>
 #include <string>
 #include <assert.h>
+#include <vector>
 
 using namespace std;
+
 namespace mystring
 {
 	class Mystring
 	{
 	public:
+
+		typedef char* iterator;
+
+		//构造函数
 		Mystring(const char* str = "")
 			:_size(strlen(str))
 		{
@@ -18,11 +24,108 @@ namespace mystring
 			strcpy(_str, str);
 		}
 
+		//拷贝构造
+		Mystring(const Mystring& s)
+			//初始化列表
+			:_str(nullptr)
+			, _capacity(0)
+			, _size(0)
+		{
+			Mystring tmp(s._str);
+			this->swap(tmp);
+		}
+
 		~Mystring()
 		{
 			delete[] _str;
 			_str = nullptr;
 			_size = _capacity = 0;
+		}
+
+		Mystring operator=(Mystring s)
+		{
+			this->swap(s);
+			return *this;
+		}
+
+		Mystring& operator+=(char ch)
+		{
+			push_back(ch);
+			return *this;
+		}
+
+		Mystring& operator+=(const char* str)
+		{
+			append(str);
+			return *this;
+		}
+
+		void append(const char* str)
+		{
+			//追加
+			size_t  len = strlen(str);
+			if (_size == _capacity)
+			{
+				reserve(_capacity * 2);
+			}
+			strncpy(_str + _size, _str, len);
+		}
+
+		void swap(Mystring& s)
+		{
+			std::swap(_str, s._str);
+			std::swap(_size, s._size);
+			std::swap(_capacity, s._capacity);
+		}
+
+		void clear()
+		{
+			_size = 0;
+			_str[_size] = '\0';
+		}
+
+		const char* c_str()const
+		{
+			return _str;
+		}
+
+		//iterator
+		iterator begin()
+		{
+			return _str;
+		}
+
+		iterator end()
+		{
+			return _str + _size;
+		}
+
+		void push_back(char c)
+		{
+			if (_size == _capacity)
+			{
+				reserve(_capacity * 2);
+			}
+
+			_str[_size++] = c;
+			_str[_size] = '\0';
+		}
+
+		void resize(size_t newSize,char c='\0')
+		{
+			if (newSize > _size)
+			{
+				// 如果newSize大于底层空间大小，则需要重新开辟空间
+				if (newSize > _capacity)
+				{
+					reserve(newSize);
+				}
+				
+				memset(_str + _size, c, newSize - _size);
+			}
+
+			_size = newSize;
+			_str[newSize] = '\0';
 		}
 
 		void reserve(size_t n)
@@ -60,6 +163,21 @@ namespace mystring
 			//拷贝输入
 			strncpy(_str + pos, str, len);
 			_size += len;
+		}
+
+		size_t size()const
+		{
+			return _size;
+		}
+
+		size_t capacity() const
+		{
+			return _capacity;
+		}
+
+		bool empty()const
+		{
+			return 0 == _size;
 		}
 
 	private:
