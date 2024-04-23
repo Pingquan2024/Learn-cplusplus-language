@@ -7,6 +7,10 @@ using namespace std;
 
 class Date
 {
+	//友元
+	friend ostream& operator<<(ostream& out, const Date& d);
+	friend istream& operator>>(istream& in, Date& d);
+
 public:
 	//构造函数
 	Date(int year = 1970, int month = 1, int day = 1);
