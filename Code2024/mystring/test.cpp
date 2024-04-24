@@ -40,4 +40,6 @@ int main()
 {
 	//test_mystring();
 	TestBitstring();
+
+	return 0;
 }
