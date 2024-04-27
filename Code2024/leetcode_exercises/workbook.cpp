@@ -1,9 +1,5 @@
-//代码段集合
+/*代码段集合，该文件不可直接运行*/
 
-#include <iostream>
-#include <vector>
-
-using namespace std;
 
 //字符串相加
 
@@ -152,3 +148,46 @@ public:
         return left;
     }
 };
+
+// 数组中的第K个最大元素
+// class Solution 
+// {
+// public:
+//     int findKthLargest(vector<int>& nums, int k) 
+//     {
+//         priority_queue<int> pq(nums.begin(),nums.end());
+
+//     while(--k)
+//     {
+//         pq.pop();
+//     }
+
+//         return pq.top();
+//     }
+// };
+
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        priority_queue<int, vector<int>, greater<int>> pq(nums.begin(), nums.begin() + k);
+        for (size_t i = k; i < nums.size(); ++i)
+        {
+            if (nums[i] > pq.top())
+            {
+                pq.pop();
+                pq.push(nums[i]);
+            }
+        }
+
+        return pq.top();
+    }
+};
+
+// class Solution {
+// public:
+//     int findKthLargest(vector<int>& nums, int k) {
+//         sort(nums.begin(),nums.end());
+
+//         return nums[nums.size()-k];
+//     }
+// };
