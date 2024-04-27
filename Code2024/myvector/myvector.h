@@ -1,5 +1,8 @@
 #pragma once
+
 #include <iostream>
+#include <vector>
+#include <algorithm>
 
 //template < class T, class Alloc = allocator<T> > class vector; // generic template
 namespace me
@@ -13,7 +16,7 @@ namespace me
 
 		//¹¹Ôìº¯Êý
 		myvector(int _size=0,int _capacity=0)
-			_size=new int[]
+			//_size=new int[]
 		{
 
 		}
