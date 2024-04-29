@@ -10,6 +10,10 @@ void testBSTree()
 	}
 
 	t1.InOrder();
+
+	t1.Erase(8);
+	t1.InOrder();
+
 }
 
 int main()

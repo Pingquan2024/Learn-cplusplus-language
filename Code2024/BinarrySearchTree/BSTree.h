@@ -68,12 +68,12 @@ public:
 	{
 		Node* parent = nullptr;
 		Node* cur = _root;
-		while ()
+		while (cur)
 		{
 			if (cur->_key > key)
 			{
 				parent = cur;
-				cur = cur->_left;
+				cur = cur->_left; 
 			}
 			else if (cur->_key < key)
 			{
@@ -85,33 +85,64 @@ public:
 				//相等  --- 删除
 				if (cur->_left == nullptr)  //左为空
 				{
-					if (parent->_left == cur)
+					if (cur == _root)
 					{
-						parent->_left = cur->_right;
+						_root = cur->_right;
 					}
 					else
 					{
-						parent->_right = cur->_left;
+						if (parent->_left == cur)
+						{
+							parent->_left = cur->_right;
+						}
+						else
+						{
+							parent->_right = cur->_left;
+						}
 					}
-				
 					delete cur;
 				}
 				else if(cur->_right == nullptr)  //右为空
 				{
-					if (parent->_left == cur)
+					if (cur == _root)
 					{
-						parent->_left = cur->_right;
+						_root = cur->_left;
 					}
 					else
 					{
-						parent->_right = cur->_left;
+						if (parent->_left == cur)
+						{
+							parent->_left = cur->_right;
+						}
+						else
+						{
+							parent->_right = cur->_left;
+						}
 					}
-
 					delete cur;
 				}
 				else
 				{
 					// 找右树最小节点替代，也可以是左树最大节点替代
+					Node* pminRight = cur;
+					Node* minRight = cur->_right;
+					while (minRight->_left)
+					{
+						pminRight = minRight;
+						minRight = minRight->_left;
+					}
+
+					cur->_key = minRight->_key;
+
+					if (pminRight->_left == minRight)
+					{
+						pminRight->_left = minRight->_right;
+					}
+					else
+					{
+						pminRight->_right = minRight->_right;
+					}
+					delete minRight;
 				}
 				return true;
 			}
@@ -143,6 +174,7 @@ public:
 	void InOrder()
 	{
 		_InOrder(_root);
+		cout << endl;
 	}
 
 	//inorder traversal  中序遍历
