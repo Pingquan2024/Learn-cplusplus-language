@@ -102,6 +102,81 @@ public:
 		return true;
 	}
 
+
 private:
+	//左旋
+	void RotateL(Node* parent)
+	{
+		Node* SubR = parent->_right;
+		Node* SubRL = SubR->_left;
+
+		parent->_right = SubRL;
+		if(SubRL)
+			SubRL->_parent = parent;
+
+		Node* pparent = parent->_parent;
+
+		SubR->_left = parent;
+		parent->_parent = SubR;
+
+		if (pparent == nullptr)
+		{
+			_root = SubR;
+			SubR->_parent = nullptr;
+		}
+		else
+		{
+			//不是整棵树调整
+			//parent可能是pparentd的左边，也可能是右边
+			if (pparent->_left == parent)
+			{
+				pparent->_left = SubR;
+			}
+			else if (pparent->_right == parent)
+			{
+				pparent->_right = SubR;
+			}
+		}
+
+		parent->_bf = SubR->bf = 0;
+	}
+
+	//右旋
+	void RotateR(Node* parent) 
+	{
+		Node* SubL = parent->_left;
+		Node* SubLR = SubL->_right;
+		
+		SubL->_right = parent;
+		parent->_left = SubLR;
+		
+		if(SubLR)
+			SubLR->_parent = parent;
+
+		Node* ppnode = parent->_parent;
+
+		parent->_parent = SubL;
+
+		if (ppnode == nullptr)
+		{
+			_root = SubL;
+			SubL->_parent = nullptr;
+		}
+		else
+		{
+			if (ppnode->_left == parent)
+			{
+				ppnode->_left = SubL;
+			}
+			else
+			{
+				ppnode->_right = SubL;
+			}
+			SubL->_parent = parent;
+		}
+
+		SubL->_bf = parent->_bf = 0;
+	}
+
 	Node* _root = nullptr;
 };
