@@ -4,7 +4,7 @@
 using namespace std;
 
 template<class K,class V>
-class AVLTreeNode
+struct AVLTreeNode
 {
 	AVLTreeNode<K, V>* _left;
 	AVLTreeNode<K, V>* _right;
@@ -65,7 +65,7 @@ public:
 		{
 			parent->_right = cur;
 		}
-		cur->parent = parent;
+		cur->_parent = parent;
 
 		//更新平衡因子
 		while (parent)
@@ -102,27 +102,25 @@ public:
 		return true;
 	}
 
-
-private:
 	//左旋
 	void RotateL(Node* parent)
 	{
-		Node* SubR = parent->_right;
-		Node* SubRL = SubR->_left;
+		Node* subR = parent->_right;
+		Node* subRL = subR->_left;
 
-		parent->_right = SubRL;
-		if(SubRL)
-			SubRL->_parent = parent;
+		parent->_right = subRL;
+		if(subRL)
+			subRL->_parent = parent;
 
 		Node* pparent = parent->_parent;
 
-		SubR->_left = parent;
-		parent->_parent = SubR;
+		subR->_left = parent;
+		parent->_parent = subR;
 
 		if (pparent == nullptr)
 		{
-			_root = SubR;
-			SubR->_parent = nullptr;
+			_root = subR;
+			subR->_parent = nullptr;
 		}
 		else
 		{
@@ -130,53 +128,199 @@ private:
 			//parent可能是pparentd的左边，也可能是右边
 			if (pparent->_left == parent)
 			{
-				pparent->_left = SubR;
+				pparent->_left = subR;
 			}
 			else if (pparent->_right == parent)
 			{
-				pparent->_right = SubR;
+				pparent->_right = subR;
 			}
 		}
 
-		parent->_bf = SubR->bf = 0;
+		parent->_bf = subR->bf = 0;
 	}
 
 	//右旋
 	void RotateR(Node* parent) 
 	{
-		Node* SubL = parent->_left;
-		Node* SubLR = SubL->_right;
+		Node* subL = parent->_left;
+		Node* subLR = subL->_right;
 		
-		SubL->_right = parent;
-		parent->_left = SubLR;
+		subL->_right = parent;
+		parent->_left = subLR;
 		
-		if(SubLR)
-			SubLR->_parent = parent;
+		if(subLR)
+			subLR->_parent = parent;
 
 		Node* ppnode = parent->_parent;
 
-		parent->_parent = SubL;
+		parent->_parent = subL;
 
 		if (ppnode == nullptr)
 		{
-			_root = SubL;
-			SubL->_parent = nullptr;
+			_root = subL;
+			subL->_parent = nullptr;
 		}
 		else
 		{
 			if (ppnode->_left == parent)
 			{
-				ppnode->_left = SubL;
+				ppnode->_left = subL;
 			}
 			else
 			{
-				ppnode->_right = SubL;
+				ppnode->_right = subL;
 			}
-			SubL->_parent = parent;
+			subL->_parent = parent;
 		}
 
-		SubL->_bf = parent->_bf = 0;
+		subL->_bf = parent->_bf = 0;
 	}
 
+	void RotateLR(Node* parent)
+	{
+		Node* subL = parent->_left;
+		Node* subLR = subL->_right;
+		int bf = subLR->_bf;
+
+		RotateL(parent->_left);
+		RotateR(parent);
+
+		if (bf == 1)
+		{
+			subLR->_bf = -1;
+			parent->_bf = 0;
+			subL->_bf = 0;
+		}
+		else if (bf == -1)
+		{
+			subLR->_bf = 0;
+			parent->_bf = 1;
+			subL->_bf = 0;
+		}
+		else if (bf == 0)
+		{
+			subLR->_bf = 0;
+			parent->_bf = 0;
+			subL->_bf = 0;
+		}
+		else
+		{
+			assert(false);
+		}
+	}
+		
+	void RotateRL(Node * parent)
+		{
+			Node* subR = parent->_right;
+			Node* subRL = subR->_left;
+			int bf = subRL->_bf;
+
+			RotateR(parent->_right);
+			RotateL(parent);
+
+			if (bf == 1)
+			{
+				subR->_bf = 0;
+				parent->_bf = -1;
+				subRL->_bf = 0;
+			}
+			else if (bf == -1)
+			{
+				subR->_bf = 1;
+				parent->_bf = 0;
+				subRL->_bf = 0;
+			}
+			else if (bf == 0)
+			{
+				subR->_bf = 0;
+				parent->_bf = 0;
+				subRL->_bf = 0;
+			}
+			else
+			{
+				assert(false);
+			}
+		}
+
+	void _InOrder(Node* root)
+	{
+		if (root == nullptr)
+		{
+			return;
+		}
+
+		_InOrder(root->_left);
+		cout << root->_kv.first << " ";
+		_InOrder(root->_right);
+	}
+
+	void InOrder()
+	{
+		_InOrder(_root);
+		cout << endl;
+	}
+
+	void _IsBalance(Node* root)
+	{
+		if (root == nullptr)
+		{
+			return;
+		}
+
+		int leftH = _Height(root->_left);
+		int rightH = _Height(root->_right);
+
+		if (rightH - leftH != root->_bf)
+		{
+			cout << root->_kv.first << "节点平衡因子异常" << endl;
+			return false;
+		}
+
+		return abs(leftH - rightH) < 2
+			&& _IsBalance(root->_left)
+			&& _IsBalance(root->_right);
+	}
+
+	void IsBalance()
+	{
+		return _IsBalance(_root);
+	}
+
+	void _Height(Node* root)
+	{
+		if (root == nullptr)
+		{
+			return 0;
+		}
+
+		int leftH = _Height(root->_left);
+		int rightH = _Height(root->_right);
+
+		return leftH > rightH ? leftH + 1 : rightH + 1;
+	}
+
+	void Height()
+	{
+		return _Height(_root);
+	}
+
+private:
 	Node* _root = nullptr;
 };
+
+
+
+void Test_AVLTree1()
+{
+	//int a[] = { 16, 3, 7, 11, 9, 26, 18, 14, 15 };
+	int a[] = { 4, 2, 6, 1, 3, 5, 15, 7, 16, 14 };
+	AVLTree<int, int> t1;
+	for (auto e : a)
+	{
+		t1.Insert(make_pair(e, e));
+		//cout << e << "插入：" << t1.IsBalance() << endl;
+	}
+
+	t1.InOrder();
+	//cout << t1.IsBalance() << endl;
+}
