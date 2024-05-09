@@ -1,12 +1,8 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include "mystring.h"
 
-void test_string()
+void test_string1()
 {
-	std::string s;
-	s = "hello world";
-	cout << s.size() << endl;
-	cout << s.length() << endl;
 
 //string();  //构造一个空字符串
 
@@ -43,9 +39,84 @@ void test_string()
 	s1.push_back('o');
 	cout << s1 << endl;
 
+	/*insert pos位置插入*/
+//string insert(size_t pos, const string& str);   //从pos位置插入，此函数的第二个参数是一个string类型的对象，表示要插入的字符串内容。
 
+//string insert(size_t pos, const char* s);       //在pos位置插入，此函数的第二个参数是一个字符数组指针，表示要插入的字符串内容。
+
+//iterator insert(iterator p, char c);            //用迭代器插入字符c
+
+	string s("c");
+	string st = "s";
+	s.insert(1, st);
+
+	const char* toInsert = "d";
+	//s.insert(2, "d");
+	s.insert(2, toInsert);
+
+	s.insert(s.end(), 'n');
+	cout << s <<" ";
+
+	/*append拼接*/
+//string append(const string & str);              //将两个string对象进行拼接
+	
+//string append(const char* s);                   //string对象和字符串s的拼接
+	
+//string append(size_t n, char c);                //将n个字符char拼接到string对象后面
+
+	string st1("hello ");
+	string st2("C/");
+	st1.append(st2);
+	st1.append("C");
+	st1.append(2, '+');
+	cout << st1 << endl;
+
+/*pop_back删除*/
+//void pop_back();                               //删除string对象中的最后一个元素
+
+	st1.pop_back();
+	st1.pop_back();
+	st1.pop_back();
+	st1.pop_back();
+	st1.pop_back();
+	cout << st1 << endl;
+
+	/*erase删除*/
+//string erase(size_t pos = 0, size_t len = npos);   //删除pos位置的n个字符，不给n则删除后边所有字符
+ 
+//iterator erase(iterator p);                        //删除迭代器给定位置的字符
+
+//iterator erase(iterator first, iterator last);     //删除first到last区间上的所有字符
+
+	string str("I like C++!!!");
+	str.erase(10,3);
+	str.erase(str.end() - 1);
+	str.erase(str.begin() + 6, str.end());           //I like
+	cout << str << endl;
 }
 
+void test_string2()
+{
+	/*string的查找find*/
+//size_t find(const string & str, size_t pos = 0)const;       //pos为零意味着搜索整个字符串
+
+//size_t find(const char* s, size_t pos = 0)const;
+
+//size_t find(char c, size_t pos = 0)const;
+
+	string s1("https://legacy.cplusplus.com/reference/string/string/?kw=string");
+	string s2("cplusplus");
+	size_t pos1 = s1.find(s2);     
+	cout << pos1 << endl;          //15
+
+	char str[] = { "string" };     //正向搜索与字符串string所匹配的第一个位置
+	size_t pos2 = s1.find(str);
+	cout << pos2 << endl;          //39
+
+	size_t pos3 = s1.find(":");
+	cout << pos3 << endl;          //5
+
+}
 
 void Test_mystring1()
 {
@@ -75,7 +146,8 @@ void Test_mystring1()
 
 int main()
 {
-	test_string();
+	//test_string1();
+	test_string2();
 	//Test_mystring();
 
 	return 0;
