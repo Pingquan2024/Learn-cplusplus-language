@@ -15,6 +15,8 @@ void test_string1()
 //string(const string & str);  //生成str的复制品
 
 //string(const string & str, size_t pos, size_t len = npos);  //复制str中从字符位置pos开始并跨越len个字符的部分
+															  //如果第三个参数超过字符串长度，则取完结束（有多少取多少）
+	                                                          //未给出第三个参数，取到结尾
 
 	string s1;                               //构造空字符串，s1是一个string类型对象的名字
 	string s2("hello string");               //复制“hello string”
@@ -37,6 +39,7 @@ void test_string1()
 	s1.push_back('d');
 	s1.push_back('i');
 	s1.push_back('o');
+	//也可以用+=完成。
 	cout << s1 << endl;
 
 	/*insert pos位置插入*/
@@ -118,6 +121,24 @@ void test_string2()
 
 }
 
+void test_string3()
+{
+	//vs中1.5倍扩容
+	string s;
+	size_t sz = s.capacity();
+	cout << "making s grow:\n";
+	cout << "capacity changed: " << sz << '\n';
+	for (int i = 0; i < 100; ++i)
+	{
+		s.push_back('c');
+		if (sz != s.capacity())
+		{
+			sz = s.capacity();
+			cout << "capacity changed: " << sz << '\n';
+		}
+	}
+}
+
 void Test_mystring1()
 {
 	mystring::Mystring s1("hello");
@@ -147,7 +168,8 @@ void Test_mystring1()
 int main()
 {
 	//test_string1();
-	test_string2();
+	//test_string2();
+	test_string3();
 	//Test_mystring();
 
 	return 0;
