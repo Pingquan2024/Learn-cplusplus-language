@@ -1,5 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include "mystring.h"
+#include <string>
 
 void test_string1()
 {
@@ -119,6 +120,22 @@ void test_string2()
 	size_t pos3 = s1.find(":");
 	cout << pos3 << endl;          //5
 
+	size_t pos4 = s1.find("?",52); //从53后边开始查找？号
+	cout << pos4 << endl;          //第53个位置就是？号
+
+	/*string中rfind查找*/
+//size_t rfind(const string & str, size_t pos = npos)const;
+//size_t rfind(const char* s, size_t pos = npos)const;
+//size_t rfind(char c, size_t pos = npos)const;
+
+	string s3("http://www.cplusplus.com/reference/string/string/find/");
+	string s4("find");
+	size_t pos5 = s3.rfind(s4);             //查找最后一次出现的位置
+	cout << pos5 << endl;
+	size_t pos6 = s3.rfind("cplus");
+	cout << pos6 << endl;
+	size_t pos7 = s3.rfind('d', 55);       //55之前的位置去查找
+	cout << pos7 << endl;
 }
 
 void test_string3()
@@ -168,8 +185,8 @@ void Test_mystring1()
 int main()
 {
 	//test_string1();
-	//test_string2();
-	test_string3();
+	test_string2();
+	//test_string3();
 	//Test_mystring();
 
 	return 0;
