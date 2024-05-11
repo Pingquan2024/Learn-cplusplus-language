@@ -156,6 +156,22 @@ void test_string3()
 	}
 }
 
+void test_string4()
+{
+
+//int compare(const string & str)const;
+//int compare(size_t pos, size_t len, const string & str)const;
+//int compare(size_t pos, size_t len, const string & str, size_t subpos, size_t sublen)const;
+
+	string s1("world");
+	string s2("word");
+	cout << "s1和s2比较：" << s1.compare(s2) << endl;
+	cout << "s1的前三个字符和s2比较：" << s1.compare(0, 3, s2) << endl;
+	cout << "s1的前三个字符和s2的前三个比较：" << s1.compare(0, 3, s2, 0, 3) << endl;
+
+	//string replace(const string)
+}
+
 void Test_mystring1()
 {
 	mystring::Mystring s1("hello");
@@ -185,8 +201,9 @@ void Test_mystring1()
 int main()
 {
 	//test_string1();
-	test_string2();
+	//test_string2();
 	//test_string3();
+	test_string4();
 	//Test_mystring();
 
 	return 0;
