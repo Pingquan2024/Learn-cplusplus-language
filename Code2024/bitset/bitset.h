@@ -49,3 +49,94 @@ void test_bitset()
 	bs.test(10);
 	cout << bs.test(10) << endl;
 }
+
+template<size_t N>
+class twobitset
+{
+public:
+	void set(size_t x)
+	{
+		if (_bs1.test(x) == false && _bs2.test(x) == false)
+		{
+			//00 -> 01
+			_bs2.set(x);
+		}
+		else if (_bs1.test(x) == false && _bs2.test(x) == true)
+		{
+			//01 -> 10
+			_bs1.set(x);
+			_bs2.reset(x);
+		}
+			// 10   1以上
+	}
+
+	void Print()
+	{
+		for (size_t i = 0; i < N; i++)
+		{
+			if (_bs2.test(i))
+			{
+				cout << i << endl;
+			}
+		}
+	}
+
+public:
+	bitset<N> _bs1;
+	bitset<N> _bs2;
+};
+
+void test_twobitset2()
+{
+	int a[] = { 15,45,78,12,45,15,45,121,125,152,154,154 };
+	twobitset<1000> bs;
+	for (auto e : a)
+	{
+		bs.set(e);
+	}
+
+	bs.Print();
+}
+
+////////////////////////////////////////////////////////////////////
+	/*布隆过滤器*/
+template<size_t N,class K,class Hash1,class Hash2,class Hash3>
+class BloomFilter
+{
+public:
+	void set(const K& key)
+	{
+		size_t hash1 = Hash1()(key) % N;
+		_bs.set(hash1);
+
+		size_t hash2 = Hash2()(key) % N;
+		_bs.set(hash2);
+
+		size_t hash3 = Hash3()(key) % N;
+		_bs.set(hash3);
+	}
+
+	bool test(const K& key)
+	{
+		size_t hash1 = Hash1()(key) % N;
+		if (!_bs.test(hash1))
+		{
+			return false;
+		}
+
+		size_t hash2 = Hash2()(key) % N;
+		if (!_bs.test(hash2))
+		{
+			return false;
+		}
+
+		size_t hash3 = Hash3()(key) % N;
+		if (!_bs.test(hash3))
+		{
+			return false;
+		}
+	}
+
+private:
+	bitset<N> _bs;
+};
