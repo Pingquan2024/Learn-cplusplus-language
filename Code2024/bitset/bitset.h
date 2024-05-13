@@ -98,45 +98,4 @@ void test_twobitset2()
 	bs.Print();
 }
 
-////////////////////////////////////////////////////////////////////
-	/*²¼Â¡¹ıÂËÆ÷*/
-template<size_t N,class K,class Hash1,class Hash2,class Hash3>
-class BloomFilter
-{
-public:
-	void set(const K& key)
-	{
-		size_t hash1 = Hash1()(key) % N;
-		_bs.set(hash1);
 
-		size_t hash2 = Hash2()(key) % N;
-		_bs.set(hash2);
-
-		size_t hash3 = Hash3()(key) % N;
-		_bs.set(hash3);
-	}
-
-	bool test(const K& key)
-	{
-		size_t hash1 = Hash1()(key) % N;
-		if (!_bs.test(hash1))
-		{
-			return false;
-		}
-
-		size_t hash2 = Hash2()(key) % N;
-		if (!_bs.test(hash2))
-		{
-			return false;
-		}
-
-		size_t hash3 = Hash3()(key) % N;
-		if (!_bs.test(hash3))
-		{
-			return false;
-		}
-	}
-
-private:
-	bitset<N> _bs;
-};
