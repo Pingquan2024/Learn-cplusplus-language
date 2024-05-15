@@ -19,7 +19,7 @@ void test1()
 	p->Print();
 }
 
-   /*c++实现的stack*/
+/*c++实现的stack*/
 typedef int DataType;
 class Stack
 {
@@ -69,8 +69,8 @@ public:
 	{
 		if (_array)
 		{
-			free(_array); 
-			_array = NULL; 
+			free(_array);
+			_array = NULL;
 			_capacity = _size = 0;
 		}
 	}
@@ -80,18 +80,18 @@ private:
 	{
 		if (_size == _capacity)
 		{
-			int newcapacity = _capacity * 2; 
+			int newcapacity = _capacity * 2;
 			DataType* temp = (DataType*)realloc(_array, newcapacity * sizeof(DataType));
 			if (temp == NULL)
 			{
 				perror("realloc申请空间失败!!!"); return;
-			} 
-			_array = temp; 
+			}
+			_array = temp;
 			_capacity = newcapacity;
 		}
 	}
 
-private: 
+private:
 	DataType* _array;
 	int _capacity;
 	int _size;
@@ -103,7 +103,7 @@ void test2()
 	s1.Init();
 	s1.Push(12);
 	s1.Push(20);
-	s1.Push(3); 
+	s1.Push(3);
 	s1.Push(4);
 
 	printf("%d\n", s1.Top());
@@ -233,7 +233,7 @@ void test4()
 	/*析构函数*/
 // 对象在销毁时会自动调用析构函数，完成对象中资源的清理工作
 typedef int DataType;
-class Stack1 
+class Stack1
 {
 public:
 	Stack1(int capacity = 3)
@@ -285,6 +285,42 @@ void testStack1()
 	s.Push(2);
 }
 
+class Time1
+{
+public:
+	~Time1()
+	{
+		cout << "~Time1()" << endl;
+	}
+
+private:
+	int _hour;
+	int _minute;
+	int _second;
+};
+
+class Date4
+{
+private:
+
+	// 基本类型(内置类型)
+	int _year = 1970;
+	int _month = 1;
+	int _day = 1;
+
+	// 自定义类型
+	Time1 _t;
+};
+
+void test5()
+{
+	Date4 d;
+}
+// 程序运行结束后输出：~Time1()
+// 注意： 创建哪个类的对象则调用该类的析构函数，销毁那个类的对象则调用该类的析构函数。
+
+
+#if 0
 int main()
 {
 	//test1();
@@ -292,6 +328,9 @@ int main()
 	//testDate();
 	//test3();
 	//test4();
-	testStack1();
+	//testStack1();
+	test5();
 	return 0;
 }
+
+#endif
