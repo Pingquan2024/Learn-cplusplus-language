@@ -124,9 +124,11 @@ void test2()
 	//map<string, string>::iterator it = dict.begin(); auto it = dict.begin();
 }
 
+#if 0
 int main()
 {
 	//test1();
 	test2();
 	return 0;
 }
+#endif
