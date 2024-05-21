@@ -336,3 +336,44 @@ public:
         return uc == word.size() || uc <= 1;
     }
 };
+
+// Å£¿Í³ý2£¡
+#include <iostream>
+#include <queue>
+
+using namespace std;
+
+typedef long long LL;
+
+LL n, k;
+priority_queue<LL> heap;
+
+int main()
+{
+    cin >> n >> k;
+    LL sum = 0, x;
+
+    while (n--)
+    {
+        cin >> x;
+        sum += x;
+        if (x % 2 == 0)
+        {
+            heap.push(x);
+        }
+    }
+
+    while (heap.size() && k--)
+    {
+        LL t = heap.top() / 2;
+        heap.pop();
+        sum -= t;
+        if (t % 2 == 0)
+        {
+            heap.push(t);
+        }
+    }
+
+    cout << sum << endl;
+    return 0;
+}
