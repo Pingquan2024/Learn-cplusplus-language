@@ -52,31 +52,31 @@ using namespace std;
 
 int sub(int x, int y)
 {
-    return x - y;
+	return x - y;
 }
 
 struct mul
 {
-    int operator()(int x, int y)
-    {
-        return x * y;
-    }
+	int operator()(int x, int y)
+	{
+		return x * y;
+	}
 };
 
 class Sub
 {
 public:
-    Sub(int rate)
-        :_rate(rate)
-    {}
+	Sub(int rate)
+		:_rate(rate)
+	{}
 
-    int func(int a, int b)
-    {
-        return (a - b) * _rate;
-    }
+	int func(int a, int b)
+	{
+		return (a - b) * _rate;
+	}
 
 private:
-    int _rate;
+	int _rate;
 };
 
 //class Solution 
@@ -116,61 +116,83 @@ private:
 class Solution
 {
 public:
-    int evalRPN(vector<string>& tokens)
-    {
-        stack<int> st;
-        map<string, function<int(int, int)>> opFuncMap =
-        {
-            {"+",[](int i,int j) {return i + j; }},
-            {"-",sub},
-            {"*",mul()},
-            {"&",bind(&Sub::func,Sub(3),placeholders::_1,placeholders::_2)}
-        };
+	int evalRPN(vector<string>& tokens)
+	{
+		stack<int> st;
+		map<string, function<int(int, int)>> opFuncMap =
+		{
+			{"+",[](int i,int j) {return i + j; }},
+			{"-",sub},
+			{"*",mul()},
+			{"&",bind(&Sub::func,Sub(3),placeholders::_1,placeholders::_2)}
+		};
 
-        for (auto& str : tokens)
-        {
-            if (opFuncMap.find(str) != opFuncMap.end())
-            {
-                int right = st.top();
-                st.pop();
-                int left = st.top();
-                st.pop();
+		for (auto& str : tokens)
+		{
+			if (opFuncMap.find(str) != opFuncMap.end())
+			{
+				int right = st.top();
+				st.pop();
+				int left = st.top();
+				st.pop();
 
-                st.push(opFuncMap[str](left, right));
-            }
-            return st.top();
-        }
-    }
+				st.push(opFuncMap[str](left, right));
+			}
+			return st.top();
+		}
+	}
 private:
 
 };
 
 void Print(int a, int b)
 {
-    cout << a << " ";
-    cout << b << endl;
+	cout << a << " ";
+	cout << b << endl;
+}
+
+// decltype的一些使用使用场景
+template<class T1, class T2>
+void F(T1 t1, T2 t2)
+{
+	decltype(t1 * t2) ret;
+	cout << typeid(ret).name() << endl;
+}
+
+void test_decltype()
+{
+	const int x = 1;
+	double y = 2.2;
+	decltype(x * y) ret; // ret的类型是double 
+	decltype(&x) p;      //p的类型是int*
+	cout << typeid(ret).name() << endl;
+	cout << typeid(p).name() << endl;
+	F(1, 'a');
 }
 
 int main()
 {
-    Print(1, 2);
+	Print(1, 2);
 
-    //调整参数
-    // placeholders::_1  占位符
-    //bind(Print, placeholders::_1, placeholders::_2);
-    //auto RPrint = bind(Print, placeholders::_2, placeholders::_1);
-    function<void(int,int)> RPrint = bind(Print, placeholders::_2, placeholders::_1);
-    RPrint(10, 20);
+	//调整参数
+	// placeholders::_1  占位符
+	//bind(Print, placeholders::_1, placeholders::_2);
+	//auto RPrint = bind(Print, placeholders::_2, placeholders::_1);
+	function<void(int, int)> RPrint = bind(Print, placeholders::_2, placeholders::_1);
+	RPrint(10, 20);
 
-    //绑定的调整参数个数
-    function<int(Sub, int, int)> fSub = &Sub::func;
-    cout << fSub(Sub(3), 10, 20) << endl;
+	//绑定的调整参数个数
+	function<int(Sub, int, int)> fSub = &Sub::func;
+	cout << fSub(Sub(3), 10, 20) << endl;
 
-    function<int(int, int)> fSub1 = bind(&Sub::func, Sub(3), placeholders::_1, placeholders::_2);
-    cout << fSub1(10, 20) << endl;
+	function<int(int, int)> fSub1 = bind(&Sub::func, Sub(3), placeholders::_1, placeholders::_2);
+	cout << fSub1(10, 20) << endl;
 
-    function<int(Sub, int)> fSub2 = bind(&Sub::func, placeholders::_1,100, placeholders::_2);
-    cout << fSub2(Sub(3), 20) << endl;
+	function<int(Sub, int)> fSub2 = bind(&Sub::func, placeholders::_1, 100, placeholders::_2);
+	cout << fSub2(Sub(3), 20) << endl;
 
-    return 0;
+	test_decltype();
+
+	return 0;
 }
+
