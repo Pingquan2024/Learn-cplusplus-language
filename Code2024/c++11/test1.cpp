@@ -1,54 +1,62 @@
-﻿#include <iostream>
+﻿#define _CRT_SECURE_NO_WARNINGS 1
+
+#include <iostream>
 #include <string>
 #include <vector>
 #include <stack>
 #include <map>
 #include <functional>
+
 using namespace std;
 
+void test_auto() 
+{
+	int i = 10; 
+	auto p = &i;
+	auto pf = strcpy;
 
-//int main() 
-//{
-//	int i = 10; 
-//	auto p = &i;
-//	auto pf = strcpy;
-//	cout << typeid(p).name() << endl; 
-//	cout << typeid(pf).name() << endl;
-//	map<string, string> dict = { {"sort", "排序"}, {"insert", "插入"} }; 
-//	//map<string, string>::iterator it = dict.begin(); auto it = dict.begin();
-//	return 0;
-//}
+	cout << typeid(p).name() << endl; 
+	cout << typeid(pf).name() << endl;
 
-//class Solution
-//{
-//public:
-//    bool detectCapitalUse(string word)
-//    {
-//        int uc = 0;
-//        for (int i =0; i < word.size(); i++)
-//        {
-//            if (isupper(word[i]) && uc++ < i)
-//            {
-//                return false;
-//            }
-//        }
-//
-//        return uc == word.size() || uc <= 1;
-//    }
-//};
+	map<string, string> dict = { {"sort", "排序"}, {"insert", "插入"} }; 
+	//map<string, string>::iterator it = dict.begin(); 
+	auto it = dict.begin();
 
-//int main()
-//{
-//    Solution s;
-//    string s1 = "Leetcode";
-//    string s2 = "LEETCODE";
-//    string s3 = "LettcoDe";
-//    cout << s.detectCapitalUse(s1) << endl;
-//    cout << s.detectCapitalUse(s2) << endl;
-//    cout << s.detectCapitalUse(s3) << endl;
-//    
-//    return 0;
-//}
+	cout << typeid(dict).name() << endl << endl;
+	cout << typeid(it).name() << endl;
+
+}
+
+class Solution1
+{
+public:
+    bool detectCapitalUse(string word)
+    {
+		//word是一个vector容器，word.size() 在容器说明中 被定义为 : unsigned int 类型, 而i是int 类型  会出现不匹配"warning C4018: “<”: 有符号/无符号不匹配"
+        unsigned int uc = 0;
+        for (unsigned int i =0; i < word.size(); i++)
+        {
+            if (isupper(word[i]) && uc++ < i)
+            {
+                return false;
+            }
+        }
+
+        return uc == word.size() || uc <= 1;
+    }
+};
+
+void test_Solution1()
+{
+    Solution1 s;
+    string s1 = "Leetcode";
+    string s2 = "LEETCODE";
+    string s3 = "LettcoDe";
+    cout << s.detectCapitalUse(s1) << endl;
+    cout << s.detectCapitalUse(s2) << endl;
+    cout << s.detectCapitalUse(s3) << endl;
+    
+}
 
 int sub(int x, int y)
 {
@@ -79,41 +87,41 @@ private:
 	int _rate;
 };
 
-//class Solution 
-//{
-//public:
-//    int evalRPN(vector<string>& tokens) 
-//    {
-//        stack<int> st;
-//        map<string, function<int(int, int)>> opFuncMap = 
-//        {
-//           { "+",  [](int i, int j) {return i + j; } },         
-//           { "-",  [](int i, int j) {return i - j; } },         
-//           { "*",  [](int i, int j) {return i * j; } },   
-//           { "/",  [](int i, int j) {return i / j; } } };
-//        for (auto& str : tokens)
-//        {
-//            if (opFuncMap.find(str) != opFuncMap.end()) 
-//            {
-//                int right = st.top();
-//                st.pop();
-//                int left = st.top();
-//                st.pop();
-//                st.push(opFuncMap[str](left, right));
-//            }
-//            else
-//            {
-//                // 1、atoi  itoa
-//                // 2、sprintf scanf              
-//                // 3、stoi  to_string  c++11
-//                st.push(stoi(str));
-//            }
-//        }
-//        return st.top();
-//    }
-//};
+class Solution2 
+{
+public:
+    int evalRPN(vector<string>& tokens) 
+    {
+        stack<int> st;
+        map<string, function<int(int, int)>> opFuncMap = 
+        {
+           { "+",  [](int i, int j) {return i + j; } },         
+           { "-",  [](int i, int j) {return i - j; } },         
+           { "*",  [](int i, int j) {return i * j; } },   
+           { "/",  [](int i, int j) {return i / j; } } };
+        for (auto& str : tokens)
+        {
+            if (opFuncMap.find(str) != opFuncMap.end()) 
+            {
+                int right = st.top();
+                st.pop();
+                int left = st.top();
+                st.pop();
+                st.push(opFuncMap[str](left, right));
+            }
+            else
+            {
+                // 1、atoi  itoa
+                // 2、sprintf scanf              
+                // 3、stoi  to_string  c++11
+                st.push(stoi(str));
+            }
+        }
+        return st.top();
+    }
+};
 
-class Solution
+class Solution3
 {
 public:
 	int evalRPN(vector<string>& tokens)
@@ -170,7 +178,7 @@ void test_decltype()
 	F(1, 'a');
 }
 
-int main()
+void test_bind()
 {
 	Print(1, 2);
 
@@ -191,8 +199,16 @@ int main()
 	function<int(Sub, int)> fSub2 = bind(&Sub::func, placeholders::_1, 100, placeholders::_2);
 	cout << fSub2(Sub(3), 20) << endl;
 
-	test_decltype();
+}
 
-	return 0;
+void main1()
+{
+	//test_auto();
+
+	test_Solution1();
+
+	//test_decltype();
+
+	//test_bind();
 }
 
