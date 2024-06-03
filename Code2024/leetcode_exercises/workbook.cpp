@@ -417,3 +417,24 @@ public:
     }
 };
 
+
+//557. 反转字符串中的单词 III
+class Solution
+{
+public:
+    string reverseWords(string s)
+    {
+        size_t start = 0;
+        size_t end = s.find(" ");
+        while (end != string::npos)
+        {
+            reverse(s.begin() + start, s.begin() + end);
+            start = end + 1;
+            end = s.find(" ", start);
+        }
+
+        end = s.size();
+        reverse(s.begin() + start, s.begin() + end);
+        return s;
+    }
+};
