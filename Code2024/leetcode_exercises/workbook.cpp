@@ -438,3 +438,53 @@ public:
         return s;
     }
 };
+
+
+//二维字符数组和一个单词，判断单词是否在数组中出现，
+class Solution
+{
+    int n, m;
+    bool vis[101][101] = { 0 };
+    int dx[4] = { 0, 0, 1, -1 };
+    int dy[4] = { 1, -1, 0, 0 };
+
+public:
+
+    bool exist(vector<string>& board, string word)
+    {
+        m = board.size(), n = board[0].size();
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (board[i][j] == word[0])
+                {
+                    if (dfs(board, i, j, word, 0)) return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    bool dfs(vector<string>& board, int i, int j, string& word, int pos)
+    {
+        if (pos == word.size() - 1)
+        {
+            return true;
+        }
+
+        vis[i][j] = true;
+        for (int k = 0; k < 4; k++)
+        {
+            int a = i + dx[k], b = j + dy[k];
+            if (a >= 0 && a < m && b >= 0 && b < n && !vis[a][b] && board[a][b] == word[pos + 1])
+            {
+                if (dfs(board, a, b, word, pos + 1)) return true;
+            }
+        }
+
+        vis[i][j] = false;
+        return false;
+    }
+};
