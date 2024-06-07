@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include <string>
+#include <string.h>
 #include <assert.h>
 #include <vector>
 
@@ -14,6 +14,7 @@ namespace mystring
 	public:
 
 		typedef char* iterator;
+		typedef const char* const_iterator;
 
 		//¹¹Ôìº¯Êý
 		Mystring(const char* str = "")
@@ -89,6 +90,18 @@ namespace mystring
 			return _str;
 		}
 
+		const char& operator[](size_t pos)const
+		{
+			assert(pos < _size);
+			return _str[pos];
+		}
+
+		const char& operator[](size_t pos)
+		{
+			assert(pos < _size);
+			return _str[pos];
+		}
+
 		//iterator
 		iterator begin()
 		{
@@ -96,6 +109,17 @@ namespace mystring
 		}
 
 		iterator end()
+		{
+			return _str + _size;
+		}
+
+		//const_iterator
+		const_iterator begin()const
+		{
+			return _str;
+		}
+
+		const_iterator end()const
 		{
 			return _str + _size;
 		}
@@ -178,6 +202,21 @@ namespace mystring
 		bool empty()const
 		{
 			return 0 == _size;
+		}
+
+		bool operator>(const string& s)const
+		{
+			return strcmp(_str, s._str) > 0;
+		}
+
+		bool operator==(const string& s) const
+		{
+			return strcmp(_str, s._str) == 0;
+		}
+
+		bool operator>=(const string& s)const
+		{
+			return *this > s || (s == *this);
 		}
 
 	private:

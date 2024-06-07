@@ -203,7 +203,7 @@ int main()
 	//test_string1();
 	//test_string2();
 	//test_string3();
-	test_string4();
+	//test_string4();
 	//Test_mystring();
 
 	return 0;
