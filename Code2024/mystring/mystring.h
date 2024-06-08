@@ -219,6 +219,21 @@ namespace mystring
 			return *this > s || (s == *this);
 		}
 
+		bool operator<(const string& s) const
+		{
+			return !(*this >= s);
+		}
+
+		bool operator<=(const string& s) const
+		{
+			return !(*this > s);
+		}
+
+		bool operator!=(const string& s) const
+		{
+			return !(*this == s);
+		}
+
 	private:
 		char* _str;
 		size_t _capacity;
