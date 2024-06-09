@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
+
 #include "mystring.h"
-#include <string>
 
 void test_string1()
 {
@@ -22,7 +22,7 @@ void test_string1()
 	string s1;                               //构造空字符串，s1是一个string类型对象的名字
 	string s2("hello string");               //复制“hello string”
 	string s3("hello world", 3);             //复制“hello world”的前三个字符
-	string s4(10, 'h');                     //生成10个‘s’的字符的字符串
+	string s4(10, 'h');                     //生成10个‘h’的字符的字符串
 	string s5(s2);                           //生成s2的复制品
 	string s6(s3, 0, 4);                     //s2中从字符位置0开始并跨越4个字符的部分
 	
@@ -75,7 +75,7 @@ void test_string1()
 	st1.append(2, '+');
 	cout << st1 << endl;
 
-/*pop_back删除*/
+  /*pop_back删除*/
 //void pop_back();                               //删除string对象中的最后一个元素
 
 	st1.pop_back();
@@ -140,7 +140,7 @@ void test_string2()
 
 void test_string3()
 {
-	//vs中1.5倍扩容
+	//vs中1.5倍扩容  linux中2倍扩容
 	string s;
 	size_t sz = s.capacity();
 	cout << "making s grow:\n";
@@ -172,7 +172,7 @@ void test_string4()
 	//string replace(const string)
 }
 
-void Test_mystring1()
+void test_mystring1()
 {
 	mystring::Mystring s1("hello");
 	s1.push_back(' ');
@@ -204,7 +204,7 @@ int main()
 	//test_string2();
 	//test_string3();
 	//test_string4();
-	//Test_mystring();
+	//test_mystring1();
 
 	return 0;
 }
