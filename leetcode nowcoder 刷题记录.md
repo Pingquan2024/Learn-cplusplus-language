@@ -1,6 +1,6 @@
 # leetcode 刷题记录
 
-##（1）[27.移除元素]([27. 移除元素 - 力扣（LeetCode）](https://leetcode.cn/problems/remove-element/description/))
+##（1）[27.移除元素](https://leetcode.cn/problems/remove-element/description/)
 
 给你一个数组 `nums` 和一个值 `val`，你需要 **[原地](https://baike.baidu.com/item/原地算法)** 移除所有数值等于 `val` 的元素。元素的顺序可能发生改变。然后返回 `nums` 中与 `val` 不同的元素的数量。
 
@@ -54,7 +54,7 @@ int removeElement(int* nums, int numsSize, int val)
 
 
 
-## （2）[2129.将标题首字母大写]([2129. 将标题首字母大写 - 力扣（LeetCode）](https://leetcode.cn/problems/capitalize-the-title/description/))
+## （2）[2129.将标题首字母大写](https://leetcode.cn/problems/capitalize-the-title/description/)
 
 给你一个字符串 `title` ，它由单个空格连接一个或多个单词组成，每个单词都只包含英文字母。请你按以下规则将每个单词的首字母 **大写** ：
 
@@ -189,7 +189,8 @@ int[] expectedNums = [...]; // 长度正确的期望答案
 int k = removeDuplicates(nums); // 调用
 
 assert k == expectedNums.length;
-for (int i = 0; i < k; i++) {
+for (int i = 0; i < k; i++) 
+{
     assert nums[i] == expectedNums[i];
 }
 ```
@@ -270,9 +271,9 @@ class Solution {
 public:
     int findKthLargest(vector<int>& nums, int k) {
         priority_queue<int,vector<int>,greater<int>> pq(nums.begin(),nums.begin()+k); 
-        for(size_t i=k;i<nums.size();++i)
+        for(size_t i = k; i < nums.size(); ++i)
         {
-        if(nums[i]>pq.top())
+        if(nums[i] > pq.top())
         {
             pq.pop();
             pq.push(nums[i]);
@@ -348,7 +349,8 @@ public:
             if (guess(mid) <= 0) 
             {
                 right = mid; // 答案在区间 [left, mid] 中
-            } else 
+            } 
+            else 
             {
                 left = mid + 1; // 答案在区间 [mid+1, right] 中
             }
@@ -410,16 +412,16 @@ public:
         {
             int flag=m[c];
             if(flag >= 1 && flag <= 3) 
-            st.push(c);
+            	st.push(c);
             else if(!st.empty() && m[st.top()] == flag - 3) 
-            st.pop();
+            	st.pop();
             else 
             {
                 istrue=false;break;
             }
         }
         if(!st.empty()) 
-        istrue=false;
+        	istrue=false;
         
         return istrue;
     }
@@ -594,6 +596,7 @@ public:
             --end1;
             --end2;
         }
+        
         if(carry_bit == 1)
         {
             strRet += '1';
@@ -608,7 +611,7 @@ public:
 
 
 
-##（11）[69. x 的平方根 ](https://leetcode.cn/problems/sqrtx/)
+##（11）[69。 x 的平方根 ](https://leetcode.cn/problems/sqrtx/)
 
 给你一个非负整数 `x` ，计算并返回 `x` 的 **算术平方根** 。
 
@@ -636,9 +639,11 @@ public:
 **代码**
 
 ```c
-class Solution {
+class Solution 
+{
 public:
-    int mySqrt(int x) {
+    int mySqrt(int x) 
+    {
         return sqrt(x);
     }
 };
@@ -766,7 +771,8 @@ public:
                  || (i > 1 && player[i - 2] >= 10)) 
             {
                 res += 2 * player[i];
-            } else 
+            } 
+            else 
             {
                 res += player[i];
             }
@@ -828,7 +834,7 @@ public:
 
 **代码**
 
-```c
+```cpp
 class Solution 
 {
 public:
@@ -857,7 +863,7 @@ public:
 
  
 
-```
+```txt
 输入：root = [3,9,20,null,null,15,7]
 输出：3
 ```
@@ -871,7 +877,7 @@ public:
 
 **代码**
 
-```c
+```cpp
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -937,7 +943,7 @@ public:
 
 **代码**
 
-```c
+```cpp
 class Solution {
 public:
     bool isLetterOrNumber(char ch) 
@@ -1005,7 +1011,7 @@ public:
 
 **代码**
 
-```c
+```cpp
 // 只要记录有多少个大写字母即可，在遍历过程中，如果大写字母的个数小于正在遍历的下标，说明不符合题解，既不是连续的出现大写字母，如 “AaAa” 遍历到第二个 A 时的情况。
 // 最终判断是否为全大写或只是首字母大写即可。
 
@@ -1053,7 +1059,7 @@ public:
 
 **代码**
 
-```c
+```cpp
 class Solution 
 {
 public:
@@ -1082,7 +1088,7 @@ public:
 
 **示例 1:**
 
-```
+```cpp
 输入: nums = [1,2,3,4,5,6,7], k = 3
 输出: [5,6,7,1,2,3,4]
 解释:
@@ -1103,7 +1109,7 @@ public:
 
 **代码**
 
-```c
+```cpp
 class Solution 
 {
 public:
@@ -1165,7 +1171,7 @@ public:
 
 **代码**
 
-```c
+```cpp
 /**
  * Definition for singly-linked list.
  * struct ListNode {
@@ -1278,7 +1284,7 @@ public:
 
 **代码**
 
-```c
+```cpp
 class Solution 
 {
 public:
@@ -1330,7 +1336,7 @@ public:
 
 **代码**
 
-```c
+```cpp
 class Solution
 {
 public:
@@ -1389,7 +1395,7 @@ public:
 
 **代码**
 
-```c
+```cpp
 class Solution 
 {
 public:
@@ -1499,10 +1505,13 @@ int numIdenticalPairs(int* nums, int numsSize)
 **代码**
 
 ```c
-int addDigits(int num){
-    while (num >= 10) {
+int addDigits(int num)
+{
+    while (num >= 10) 
+    {
         int sum = 0;
-        while (num > 0) {
+        while (num > 0) 
+        {
             sum += num % 10;
             num /= 10;
         }
@@ -2220,7 +2229,7 @@ public:
 
 **代码**
 
-```c
+```cpp
 class Solution {
 public:
     vector<int> shuffle(vector<int>& nums, int n) 
@@ -2265,7 +2274,7 @@ public:
 
 **代码**
 
-```c
+```cpp
 class Solution {
 public:
     vector<vector<int>> transpose(vector<vector<int>>& matrix) 
@@ -2310,13 +2319,17 @@ public:
 
 **代码**
 
-```c
-class Solution {
+```cpp
+class Solution 
+{
 public:
-    void moveZeroes(vector<int>& nums) {
+    void moveZeroes(vector<int>& nums) 
+    {
         int n = nums.size(), left = 0, right = 0;
-        while (right < n) {
-            if (nums[right]) {
+        while (right < n) 
+        {
+            if (nums[right]) 
+            {
                 swap(nums[left], nums[right]);
                 left++;
             }
@@ -2359,7 +2372,7 @@ public:
 
 **代码**
 
-```c
+```cpp
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -2371,9 +2384,11 @@ public:
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-class Solution {
+class Solution 
+{
 public:
-    string tree2str(TreeNode* root) {
+    string tree2str(TreeNode* root) 
+    {
         if(root == nullptr)
         {
             return "";
@@ -2438,7 +2453,7 @@ public:
 
 **代码**
 
-```c
+```cpp
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -2508,8 +2523,6 @@ public:
 
 给定一个二叉树的根节点 `root` ，返回 *它的 **中序** 遍历* 。
 
- 
-
 **示例 1：**
 
 ![img](https://assets.leetcode.com/uploads/2020/09/15/inorder_1.jpg)
@@ -2548,7 +2561,8 @@ public:
  * };
  */
 
-class Solution {
+class Solution 
+{
 public:
     vector<int> inorderTraversal(TreeNode* root) 
     {
@@ -2605,7 +2619,7 @@ for (int i = 0; i < k; i++) {
 
 **代码**
 
-```c
+```cpp
 //删除有序数组中的重复项
 int removeDuplicates(int* nums, int numsSize) 
 {
@@ -2908,21 +2922,28 @@ struct ListNode* reverseList(struct ListNode* head)
  */
 
 
-struct ListNode* partition(struct ListNode* head, int x) {
+struct ListNode* partition(struct ListNode* head, int x) 
+{
     struct ListNode* small = malloc(sizeof(struct ListNode));
     struct ListNode* smallHead = small;
     struct ListNode* large = malloc(sizeof(struct ListNode));
     struct ListNode* largeHead = large;
-    while (head != NULL) {
-        if (head->val < x) {
+    
+    while (head != NULL) 
+    {
+        if (head->val < x) 
+        {
             small->next = head;
             small = small->next;
-        } else {
+        } 
+        else 
+        {
             large->next = head;
             large = large->next;
         }
         head = head->next;
     }
+    
     large->next = NULL;
     small->next = largeHead->next;
     return smallHead->next;
@@ -2965,10 +2986,12 @@ struct ListNode* partition(struct ListNode* head, int x) {
  *     struct ListNode *next;
  * };
  */
-struct ListNode* reverseList(struct ListNode* head) {
+struct ListNode* reverseList(struct ListNode* head) 
+{
     struct ListNode* prev = NULL;
     struct ListNode* curr = head;
-    while (curr != NULL) {
+    while (curr != NULL) 
+    {
         struct ListNode* nextTemp = curr->next;
         curr->next = prev;
         prev = curr;
@@ -2977,18 +3000,22 @@ struct ListNode* reverseList(struct ListNode* head) {
     return prev;
 }
 
-struct ListNode* endOfFirstHalf(struct ListNode* head) {
+struct ListNode* endOfFirstHalf(struct ListNode* head) 
+{
     struct ListNode* fast = head;
     struct ListNode* slow = head;
-    while (fast->next != NULL && fast->next->next != NULL) {
+    while (fast->next != NULL && fast->next->next != NULL) 
+    {
         fast = fast->next->next;
         slow = slow->next;
     }
     return slow;
 }
 
-bool isPalindrome(struct ListNode* head) {
-    if (head == NULL) {
+bool isPalindrome(struct ListNode* head) 
+{
+    if (head == NULL) 
+    {
         return true;
     }
 
@@ -3000,8 +3027,10 @@ bool isPalindrome(struct ListNode* head) {
     struct ListNode* p1 = head;
     struct ListNode* p2 = secondHalfStart;
     bool result = true;
-    while (result && p2 != NULL) {
-        if (p1->val != p2->val) {
+    while (result && p2 != NULL) 
+    {
+        if (p1->val != p2->val) 
+        {
             result = false;
         }
         p1 = p1->next;
@@ -3322,11 +3351,13 @@ int* plusOne(int* digits, int digitsSize, int* returnSize)
         if(digits[i] == 10)
             digits[i] = 0;
     }
+    
     //元素全为9开辟新数组
     int* ans = malloc(sizeof(int) * (digitsSize + 1));
     memset(ans, 0, sizeof(int) * (digitsSize + 1));//全部置0
     ans[0] = 1;
     *returnSize = digitsSize + 1;
+    
     return ans;
 }
 
@@ -3364,7 +3395,8 @@ int* plusOne(int* digits, int digitsSize, int* returnSize)
 **代码**
 
 ```c
-int cmp(const void* _a, const void* _b) {
+int cmp(const void* _a, const void* _b) 
+{
     int a = *(int*)_a, b = *(int*)_b;
     return a - b;
 }
@@ -3442,6 +3474,7 @@ int* twoSum(int* nums, int numsSize, int target, int* returnSize)
             }
         }
     }
+    
     *returnSize = 0;
     return NULL;
 }
@@ -3537,9 +3570,11 @@ char* addBinary(char* a, char* b)
 **代码**
 
 ```c
-class Solution {
+class Solution 
+{
 public:
-    int sum(int num1, int num2) {
+    int sum(int num1, int num2) 
+    {
         return num1 + num2;
     }
 };
@@ -3579,10 +3614,12 @@ public:
 **代码**
 
 ```c
-class Solution {
+class Solution 
+{
 public:
-    vector<double> convertTemperature(double celsius) {
-        
+    vector<double> convertTemperature(double celsius) 
+    {
+        return {celsius + 273.15, celsius * 1.80 + 32.00};
     }
 };
 ```
@@ -3612,20 +3649,21 @@ public:
 **代码**
 
 ```c
-class Solution {
+class Solution 
+{
 public:
-    int smallestEvenMultiple(int n) {
-        //最小公倍数
-    if(n%2==0)
+    int smallestEvenMultiple(int n) 
     {
-        //偶数
-        if(n>=2)
+        //最小公倍数
+        if(n%2==0)
         {
-            return n;
+            //偶数
+            if(n>=2)
+            {
+                return n;
+            }
         }
-    }
-
-    return 2*n;
+        return 2*n;
     }
 };
 ```
@@ -3674,15 +3712,17 @@ public:
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-class Solution {
+class Solution 
+{
 public:
-    bool checkTree(TreeNode* root) {
-         if((root->left->val)+(root->right->val)==root->val)
+    bool checkTree(TreeNode* root) 
     {
-        return true;
-    }
-    else
-    return false;
+        if((root->left->val)+(root->right->val)==root->val)
+        {
+            return true;
+        }
+        else
+            return false;
     }
 };
 ```
@@ -3733,15 +3773,18 @@ public:
 **代码**
 
 ```c
-class Solution {
+class Solution 
+{
 public:
-    int xorOperation(int n, int start) {
-         int i=0;
-    int q=0;
-    for(i=0;i<n;i++)
+    int xorOperation(int n, int start) 
     {
-        q^=start + 2*i;
-    }
+        int i=0;
+        int q=0;
+    	for(i=0;i<n;i++)
+    	{
+        	q^=start + 2*i;
+    	}
+        
     return q;
     }
 };
@@ -3971,7 +4014,7 @@ public:
 
 ```cpp
 class Solution
- {
+{
 public:
 	string reverseStr(string s, int k) 
     {
@@ -4216,10 +4259,12 @@ int main()
     {
         scanf("%d ", &arr[i]);
     }
+    
     for(i=n; i<n+m; i++)
     {
         scanf("%d ", &arr[i]);
     }
+    
     for(i=0; i<n+m; i++)
     {
         for(j=0; j<n+m-i-1; j++)
@@ -4232,10 +4277,12 @@ int main()
             }
         }
     }
+    
     for(i=0; i<n+m; i++)
     {
         printf("%d ", arr[i]);
     }
+
 }
 
 ```
@@ -5081,5 +5128,247 @@ public:
         return false;
     }
 };
+```
+
+
+
+##（12）[游游的you](https://www.nowcoder.com/questionTerminal/cd117803b3364b218a8b3dcc498dee25)
+
+游游现在有a个'y'，b个'o'，c个'u'，他想用这些字母拼成一个字符串。
+
+三个相邻的字母是"you"可以获得2分，两个相邻的字母是"oo"，可以获得1分。
+
+问最多可以获得多少分？
+
+##### **输入描述:**
+
+```
+第一行一个整数qqq，代表询问次数。
+接下来qqq行，每行三个正整数a,b,ca,b,ca,b,c，用空格隔开。
+1≤q≤1051\leq q \leq 10^51≤q≤105
+1≤a,b,c≤1091\leq a,b,c \leq 10^91≤a,b,c≤109
+```
+
+ **输出描述**
+
+```
+输出q行，代表每次询问的答案。
+```
+
+示例1
+
+ **输入**
+
+```
+3
+1 1 1
+2 3 2
+1 5 2
+```
+
+**输出**
+
+```
+2
+4
+5
+```
+
+**说明**
+
+```
+第一次询问，可以拼出"you"，获得2分。
+第二次询问，可以拼出"oyouyou"，获得4分。
+第三次询问，可以拼出"uooooyou"，获得5分。
+```
+
+**代码**
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int q;
+    int a, b, c;
+
+    cin >> q;
+    while(q--)
+    {
+        cin >> a >> b >> c;
+        int x = min(a, min(b, c));
+        cout << (2 * x + max(b - x -1, 0)) << endl;
+    }
+
+    return 0;
+}
+```
+
+##（13）[杨辉三角](https://www.nowcoder.com/questionTerminal/e671c6a913d448318a49be87850adbcc)
+
+KiKi知道什么叫杨辉三角之后对杨辉三角产生了浓厚的兴趣，他想知道杨辉三角的前n行，请编程帮他解答。杨辉三角，本质上是二项式(a+b)的n次方展开后各项的系数排成的三角形。其性质包括：每行的端点数为1， 一个数也为1；每个数等于它左上方和上方的两数之和。 
+
+##### **输入描述:**
+
+```
+第一行包含一个整数数n。 (1≤n≤30)
+```
+
+##### **输出描述:**
+
+```
+包含n行，为杨辉三角的前n行，每个数输出域宽为5。
+```
+
+示例1
+
+**输入**
+
+```
+6
+```
+
+**输出**
+
+```
+    1
+    1    1
+    1    2    1
+    1    3    3    1
+    1    4    6    4    1
+    1    5   10   10    5    1
+```
+
+**代码**
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+int dp[31][31];
+
+int main()
+{
+    int n;
+    cin >> n;
+
+    dp[1][1] = 1;
+    for(int i = 2; i <= n; i++)
+    {
+        for(int j = 1; j <= i; j++)
+        {
+            dp[i][j] = dp[i - 1][j] + dp[i - 1][j - 1];
+        }
+    }
+
+    for(int i = 1; i <= n; i++)
+    {
+        for(int j = 1; j <= i; j++)
+        {
+            printf("%5d",dp[i][j]);
+        }
+        printf("\n");
+    }
+
+    return 0;
+}
+```
+
+
+
+##（14）[NC398 腐烂的苹果](https://www.nowcoder.com/practice/54ab9865ce7a45968b126d6968a77f34?tpId=196&tqId=40529&ru=/exam/oj)
+
+**描述**
+
+给定一个 n*×*m* 的网格，其中每个单元格中可能有三种值中的一个 0 , 1 , 2。
+
+其中 0 表示这个格子为空、1 表示这个格子有一个完好的苹果，2 表示这个格子有一个腐烂的苹果。
+
+腐烂的苹果每分钟会向上下左右四个方向的苹果传播一次病菌，并导致相邻的苹果腐烂。请问经过多少分钟，网格中不存在完好的苹果。如果有苹果永远不会腐烂则返回 -1
+
+数据范围：1≤*n*,*m*≤1000 ，网格中的值满足 0≤*v**a**l*≤2 
+
+ **示例1**
+
+输入：
+
+```
+[[2,1,1],[1,0,1],[1,1,1]]
+```
+
+返回值：
+
+```
+4
+```
+
+ **示例2**
+
+输入：
+
+```
+[[2,1,0],[1,0,1],[0,0,0]]
+```
+
+返回值：
+
+```
+-1
+```
+
+**代码**
+
+```cpp
+class Solution 
+{
+    int n, m;
+    int dx[4] = { 0, 0, 1, -1 };
+    int dy[4] = { 1, -1, 0, 0 };
+    bool vis[1001][1001] = { 0 };
+
+public:
+    int rotApple(vector<vector<int> >& grid) 
+    {
+        m = grid.size(), n = grid[0].size();
+        queue<pair<int,int>> q;
+
+        for(int i = 0; i < m; i++)
+            for(int j = 0; j < n; j++)
+                if(grid[i][j] == 2)
+                    q.push({i,j});
+
+        int ret = 0;
+        while(q.size())
+        {
+            ret++;
+            int sz = q.size();
+            while(sz--)
+            {
+                auto [a, b] = q.front();
+                q.pop();
+                for(int i = 0; i < 4; i++)
+                {
+                    int x = a + dx[i], y = b + dy[i];
+                    if(x >= 0 && x < m && y >= 0 && y < n && !vis[x][y] && grid[x][y] == 1)
+                    {
+                        vis[x][y] = true;
+                        q.push({x, y});
+                    }
+                }
+            }
+        }
+
+        for(int i = 0; i < m; i++)
+            for(int j = 0; j < n; j++)
+                if(grid[i][j] == 1 && !vis[i][j])
+                    return -1;
+
+        return ret - 1;
+    }
+};
+
 ```
 
