@@ -48,17 +48,57 @@ void QueuePush(Queue* pq, QDataType x)
 	pq->size++;
 }
 
-void QueuePop(Queue* pq) 
-{}
+void QueuePop(Queue* pq)
+{
+	assert(pq);
+	assert(!QueueEmpty(pq));
+
+	// 1、一个节点
+	// 2、多个节点
+	if (pq->phead->next == NULL)
+	{
+		free(pq->phead);
+		pq->phead = pq->ptail = NULL;
+	}
+	else
+	{
+		// 头删
+		QNode* next = pq->phead->next;
+		free(pq->phead);
+		pq->phead = next;
+	}
+
+	pq->size--;
+}
 
 QDataType QueueFront(Queue* pq)
-{}
+{
+	assert(pq);
+	assert(!QueueEmpty(pq));
+
+	return pq->phead->data;
+}
 
 QDataType QueueBack(Queue* pq)
-{}
+{
+	assert(pq);
+	assert(!QueueEmpty(pq));
 
-bool QueueEmpty(Queue* pq)
-{}
+	return pq->ptail->data;
+}
 
 int QueueSize(Queue* pq)
-{}
+{
+	assert(pq);
+
+	return pq->size;
+}
+
+bool QueueEmpty(Queue* pq)
+{
+	assert(pq);
+
+	/*return pq->phead == NULL
+		&& pq->ptail == NULL;*/
+	return pq->size == 0;
+}
