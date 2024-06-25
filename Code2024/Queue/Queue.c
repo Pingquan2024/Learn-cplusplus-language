@@ -102,3 +102,8 @@ bool QueueEmpty(Queue* pq)
 		&& pq->ptail == NULL;*/
 	return pq->size == 0;
 }
+
+
+
+
+
