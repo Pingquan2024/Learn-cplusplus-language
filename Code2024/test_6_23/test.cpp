@@ -118,7 +118,61 @@ using namespace std;
 //    return 0;
 //}
 
+// 实现一个类，计算程序中创建出了多少个类对象。
+//class A
+//{
+//public:
+//	A(int a = 0)
+//	{
+//		++count;
+//	}
+//
+//	A(const A& aa)
+//	{
+//		++count;
+//	}
+//
+//	// 静态成员函数 -- 没有this指针
+//	static int GetCount()
+//	{
+//		// _a++; // 不能直接访问非静态成员
+//		return count;
+//	}
+//
+//private:
+//	// 不属于某个对象，所于所有对象，属于整个类
+//	static int count; // 声明
+//
+//	int _a = 0;
+//};
+//
+//int A::count = 0; // 定义初始化
 
+//void func()
+//{
+//	A aa1;
+//	A aa2(aa1);
+//	A aa3 = 1;
+//
+//	A aa4[10];
+//}
+
+//int main()
+//{
+//	func();
+//
+//	//cout << A::count << endl;
+//	//cout << aa2.count << endl;
+//	//cout << aa3.count << endl;
+//	//A* ptr = nullptr;
+//	//cout << ptr->count << endl;
+//
+//	//A aa;
+//	//cout << aa.GetCount()-1 << endl;
+//	cout << A::GetCount()<< endl;
+//
+//	return 0;
+//}
 
 class Solution
 {
