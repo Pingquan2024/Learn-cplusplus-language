@@ -82,10 +82,25 @@ private:
 
 int main()
 {
-	test_auto();
+	//test_auto();
 
-	auto_ptr<Test> t1(new Test);		// auto_ptr 定义智能指针
-	cout << "Test->debug" << t1->getDebug() << endl;
-	cout << "(*test).debug" << (*t1).getDebug() << endl;
+	//auto_ptr<Test> t1(new Test);		// auto_ptr 定义智能指针
+	//cout << "Test->debug" << t1->getDebug() << endl;
+	//cout << "(*test).debug" << (*t1).getDebug() << endl;
+
+	// auto_ptr 被C++11抛弃的主要原因
+	auto_ptr<string> p1(new string(" Number1 !"));
+	auto_ptr<string> p2(new string(" Number2 !"));
+
+	cout << "p1：" << p1.get() << endl;
+	cout << "p2：" << p2.get() << endl;
+
+	// p2赋值给p1后，首先p1会先将自己原先托管的指针释放掉，然后接收托管p2所托管的指针，
+	// 然后p2所托管的指针制NULL，也就是p1托管了p2托管的指针，而p2放弃了托管。
+	p1 = p2;
+	cout << "p1 = p2 赋值后：" << endl;
+	cout << "p1：" << p1.get() << endl;
+	cout << "p2：" << p2.get() << endl;
+
 	return 0;
 }
