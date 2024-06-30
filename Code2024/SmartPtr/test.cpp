@@ -102,5 +102,19 @@ int main()
 	cout << "p1：" << p1.get() << endl;
 	cout << "p2：" << p2.get() << endl;
 
+	// 会自动调用delete [] 函数去释放内存
+	unique_ptr<int[]> array(new int[5]);	// 支持这样定义
+
+	auto_ptr<string> p3;
+	string* str = new string("智能指针的内存管理陷阱");
+	p3.reset(str);	// p3托管str指针
+	{
+		auto_ptr<string> p4;
+		p4.reset(str);	// p4接管str指针时，会先取消p3的托管，然后再对str的托管
+	}
+
+	// 此时p3已经没有托管内容指针了，为NULL，在使用它就会内存报错！
+		// cout << "str：" << *p3 << endl;  // err
+
 	return 0;
 }
