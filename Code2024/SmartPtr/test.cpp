@@ -80,7 +80,7 @@ private:
 	int debug = 22;
 };
 
-int main()
+void Test()
 {
 	//test_auto();
 
@@ -115,6 +115,12 @@ int main()
 
 	// 此时p3已经没有托管内容指针了，为NULL，在使用它就会内存报错！
 		// cout << "str：" << *p3 << endl;  // err
+
+}
+
+int main()
+{
+	Test();
 
 	return 0;
 }
