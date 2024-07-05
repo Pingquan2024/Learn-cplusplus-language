@@ -17,6 +17,8 @@ public:
 	// 获取一个非空的span
 	Span* GetOneSpan(SpanList& list, size_t size);
 
+	void ReleaseListToSpans(void* start, size_t byte_size);		// 将一定数量的对象释放到span跨度
+
 private:
 	SpanList _spanLists[FREELIST_SUM];
 

@@ -27,9 +27,20 @@ void TLSTest()
 	t2.join();
 }
 
+void TestConcurrentAlloc()
+{
+	ConcurrentAlloc(6);
+	ConcurrentAlloc(6);
+	ConcurrentAlloc(6);
+	ConcurrentAlloc(6);
+}
+
 int main()
 {
 	//TestObjectPool();
-	TLSTest();
+	//TLSTest();
+
+	TestConcurrentAlloc();
+
 	return 0;
 }

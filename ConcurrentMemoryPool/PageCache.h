@@ -13,14 +13,12 @@ public:
 	// 获取一个k页的span
 	Span* NewSpan(size_t k);
 
-	//void* GetPageMtx()
-	//{
-	//	return _pageMtx;
-	//}
+	std::mutex& getPageMutex() 
+	{
+		return _pageMtx;
+	}
 
 private:
-	std::mutex _pageMtx;
-
 	SpanList _SpanLists[NPAGES];
 	std::mutex _pageMtx;
 

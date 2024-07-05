@@ -4,7 +4,7 @@
 CentralCache CentralCache::_sInst;
 
 // 获取一个非空的span
-Span* GetOneSpan(SpanList& list, size_t size)
+Span* CentralCache::GetOneSpan(SpanList& list, size_t size)
 {
 	Span* it = list.Begin();
 	while (it != list.End())
@@ -23,7 +23,7 @@ Span* GetOneSpan(SpanList& list, size_t size)
 	list._mtx.unlock();
 
 	// 走到这里没有空闲的span，找pageCache要
-	PageCache::GetInstance()->_pageMtx.lock();
+	PageCache::GetInstance()->getPageMutex().lock();
 	Span* span = PageCache::GetInstance()->NewSpan(SizeClass::NumMovePage(size));
 
 	// 计算span的大块内存的起始地址和大块内存的大小（字节数）
@@ -72,6 +72,8 @@ size_t CentralCache::FetchRangeObj(void*& start, void*& end, size_t batchNum, si
 	}
 	span->_freeList = NextObj(end);
 	NextObj(end) = nullptr;
+
+	span->_useCount += actualNum;
 
 	_spanLists[index]._mtx.unlock();
 
