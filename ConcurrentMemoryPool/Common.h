@@ -271,6 +271,7 @@ struct Span
 		,_prev(nullptr)
 		,_useCount(0)
 		,_freeList(nullptr)
+		,_objSize(0)
 	{ }
 
 	PAGE_ID _pageID;		// 大块内存起始页的页号
@@ -281,6 +282,7 @@ struct Span
 
 	size_t _useCount;		// 切好小块内存，被分配给thread cache的计数
 	void* _freeList;        // 切好的小块内存的自由链表
+	size_t _objSize;
 };
 
 // 带头双向循环链表
