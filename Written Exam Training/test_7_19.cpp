@@ -1,91 +1,76 @@
-	/* 游游的水果大礼包 */
-//#include <iostream>
-//
-//using namespace std;
-//
-//long long n, m, a, b, ret;
-//
-//int main()
-//{
-//	cin >> n >> m >> a >> b;
-//
-//	for (long long x = 0; x <= min(n / 2, m); x++)
-//	{
-//		long long  y = min(n - 2 * x, (m - x) / 2);
-//		ret = max(ret, a * x + b * y);
-//	}
-//
-//	cout << ret << endl;
-//
-//	return 0;
-//}
-
-    /* 买卖股票的最大利润2 */
-//#include <iostream>
-//
-//using namespace std;
-//
-//const int N = 1e5 + 10;
-//
-//int n, arr[N], ret;
-//
-//int main()
-//{
-//    cin >> n;
-//    for (int i = 0; i < n; i++)  cin >> arr[i];
-//
-//    // 贪心
-//    for (int i = 1; i < n; i++)
-//    {
-//        if (arr[i] > arr[i - 1])
-//        {
-//            ret += arr[i] - arr[i - 1];     // ret统计的是利润
-//        }
-//    }
-//
-//    cout << ret << endl;
-//
-//    return 0;
-//}
-
-	/* OR62 倒置字符串 */
+    /* 删除公共字符 */
 //#include <iostream>
 //#include <string>
-//#include <algorithm>
 //
 //using namespace std;
 //
-//string s;
+//string s, t;
 //
 //int main()
 //{
 //    getline(cin, s);
+//    getline(cin, t);
 //
-//    reverse(s.begin(), s.end());
+//    bool hash[300] = { 0 };
+//    for (char ch : t)    hash[ch] = true;
 //
-//    int n = s.size(), left = 0;
-//    while (left < n)
+//    for (auto ch : s)
 //    {
-//        int right = left;
-//        while (right < n && s[right] != ' ')   // 找单词
+//        if (!hash[ch])
 //        {
-//            right++;
+//            cout << ch;
 //        }
+//    }
+//    return 0;
+//}
+
+    /* 两个链表的第一个公共节点 */
+///*
+//struct ListNode {
+//	int val;
+//	struct ListNode *next;
+//	ListNode(int x) :
+//			val(x), next(NULL) {
+//	}
+//};*/
+//class Solution {
+//public:
+//	ListNode* FindFirstCommonNode(ListNode* pHead1, ListNode* pHead2)
+//	{
+//		ListNode* cur1 = pHead1, * cur2 = pHead2;
+//		while (cur1 != cur2)
+//		{
+//			cur1 = cur1 != nullptr ? cur1->next : pHead2;
+//			cur2 = cur2 != nullptr ? cur2->next : pHead1;
+//		}
 //
-//        // 到这说明已经遇到空格了，找完一个单词了
-//        reverse(s.begin() + left, s.begin() + right);
+//		return cur1;
+//	}
+//};
+
+    /* mari和shiny */
+//#include <iostream>
+//#include <string>
 //
-//        // 可能单词间会有多个空格，跳过该空格
-//        while (right < n && s[right] == ' ')
-//        {
-//            right++;
-//        }
+//using namespace std;
 //
-//        // 然后把right给left，继续找下一个单词
-//        left = right;
+//int n;
+//string str;
+//
+//int main()
+//{
+//    cin >> n >> str;
+//
+//    int s = 0, h = 0, y = 0;
+//    for (int i = 0; i < n; i++)
+//    {
+//        char ch = str[i];
+//        if (ch == 's')   s++;
+//        else if (ch == 'h')  h += s;
+//        else if (ch == 'y')  y += h;
 //    }
 //
-//    cout << s << endl;
+//    cout << y << endl;
 //
 //    return 0;
 //}
