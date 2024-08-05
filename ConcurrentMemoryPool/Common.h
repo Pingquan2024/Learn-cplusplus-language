@@ -80,7 +80,7 @@ public:
 	{
 		// 头删
 		assert(_freeList);
-		void* obj = _freeList;
+		void* obj = _freeList;		// 从 _freeList 获取当前链表头部的指针，并将其赋值给 obj
 		_freeList = NextObj(obj);
 		--_size;
 
@@ -119,7 +119,7 @@ public:
 	}
 
 private:
-	void* _freeList = nullptr;
+	void* _freeList = nullptr;	// 哈希桶中每个桶是一个自由链表
 
 	size_t _size = 0;
 	size_t _maxSize = 1;
@@ -149,7 +149,7 @@ public:
 		return ((bytes+align - 1) & ~(align - 1));
 	}
 
-	static inline size_t RoundUp(size_t size)
+	static inline size_t RoundUp(size_t size)	// 计算对齐字节数
 	{
 		if(size <= 128)
 		{ 
@@ -173,6 +173,7 @@ public:
 		}
 		else
 		{
+			// 不可能的情况，这里通过threadCache申请空间不会超过256kb
 			assert(false);
 			return -1;
 		}
