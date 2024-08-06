@@ -13,7 +13,7 @@ using std::endl;
 
 static const size_t MAX_BYTES = 25 * 1024;
 static const size_t FREELIST_SUM = 208;		// 256kb下总共分了208个桶
-static const size_t NPAGES = 129;
+static const size_t NPAGES = 129;			// 多开一个，1号桶（下标1）映射的就是1页的span，n号桶（下标n）映射的就是n页的span。
 static const size_t PAGE_SHIFT = 13;		// page间的转换
 
 #ifdef _WIN32
@@ -22,19 +22,13 @@ static const size_t PAGE_SHIFT = 13;		// page间的转换
 // ...
 #endif
 
-#ifdef _WIN64
-	typedef size_t PAGE_ID;
-#elif _WIN32
-	typedef unsigned long long PAGE_ID;	
-#else
-	// linux
-#endif
+typedef size_t PAGE_ID;
 
 // 直接去堆上按页申请空间
 inline static void* SystemAlloc(size_t kpage)
 {
 #ifdef _WIN32
-	void* ptr = VirtualAlloc(0, kpage << 13, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+	void* ptr = VirtualAlloc(0, kpage << PAGE_SHIFT, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
 #else
 	// linux下brk mmap等
 #endif
@@ -249,11 +243,12 @@ public:
 	}
 
 	// 计算一次向系统获取几页
-	static size_t NumMovePage(size_t size)
+	static size_t NumMovePage(size_t size)	
 	{
-		size_t num = NumMoveSize(size);
-		size_t npage = num * size;
+		size_t num = NumMoveSize(size);	 //NumMoveSize是算出threadCache向centralCache申请size大小的块时的单次最大申请块数
+		size_t npage = num * size;	// 单词申请最大空间的大小
 
+		// PAGE_SHIFT表示一页要占用多少位，比如一页8kb就是13位，这里右移就是除于页大小，算出来就是单次申请最大空间有多少页
 		npage >>= PAGE_SHIFT;
 		if (npage == 0)
 			npage = 1;
@@ -262,9 +257,10 @@ public:
 	}
 };
 
-// 管理多个连续页大块内存跨度结构
-struct Span
+// 管理以页为单位的结构体
+class Span
 {
+public:
 	Span()
 		:_pageID(0)
 		,_n(0)
@@ -273,7 +269,13 @@ struct Span
 		,_useCount(0)
 		,_freeList(nullptr)
 		,_objSize(0)
+		,_maxSize(1)
 	{ }
+
+	size_t& MaxSize()
+	{
+		return _maxSize;
+	}
 
 	PAGE_ID _pageID;		// 大块内存起始页的页号
 	size_t _n;				// 页的数量
@@ -282,11 +284,13 @@ struct Span
 	Span* _prev;
 
 	size_t _useCount;		// 切好小块内存，被分配给thread cache的计数
-	void* _freeList;        // 切好的小块内存的自由链表
+	void* _freeList;        // 每个span下面挂的小块空间的头节点
 	size_t _objSize;
+private:
+	size_t _maxSize;		// 当前自由链表申请未达到上限时，能够申请的最大空间是多少
 };
 
-// 带头双向循环链表
+// 带头双向循环链表，这里SpanList就是CentralCache中的哈希桶
 class SpanList
 {
 public:
@@ -313,7 +317,7 @@ public:
 	void Erase(Span* pos)
 	{
 		assert(pos);
-		assert(pos != _head);
+		assert(pos != _head);	// pos不能是哨兵位
 
 		// prev pos next
 		Span* prev = pos->_prev;
@@ -321,6 +325,7 @@ public:
 		
 		prev->_next = next;
 		next->_prev = prev;
+		// pos节点不需要调用delete删除，因为pos节点的Span需要回收，而不是直接删掉
 	}
 
 	Span* Begin()
@@ -340,7 +345,7 @@ public:
 
 	Span* PopFront()
 	{
-		Span* front = _head->_next;
+		Span* front = _head->_next;	// 先获取到_head后面的第一个span
 		Erase(front);
 		return front;
 	}
@@ -352,7 +357,7 @@ public:
 
 
 private:
-	Span* _head;
+	Span* _head;	// 哨兵位头节点
 public:
-	std::mutex _mtx;
+	std::mutex _mtx;	// 每个CentralCache中的哈希桶都要有一个桶锁
 };

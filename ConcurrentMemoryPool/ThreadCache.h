@@ -18,6 +18,6 @@ private:
 	FreeList _freeLists[FREELIST_SUM];		// 哈希，每个桶表示一个自由链表
 };
 
-
+// TLS的全局对象的指针，这样每个线程都能有一个独立的全局对象
 static _declspec(thread) ThreadCache* pTLSThreadCache = nullptr;
 

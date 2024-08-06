@@ -1,7 +1,7 @@
 #include "CentralCache.h"
 #include "PageCache.h"
 
-CentralCache CentralCache::_sInst;
+CentralCache CentralCache::_sInst;	// CentralCache的饿汉对象
 
 // 获取一个非空的span
 Span* CentralCache::GetOneSpan(SpanList& list, size_t size)
@@ -9,7 +9,7 @@ Span* CentralCache::GetOneSpan(SpanList& list, size_t size)
 	Span* it = list.Begin();
 	while (it != list.End())
 	{
-		if (it->_freeList != nullptr)
+		if (it->_freeList != nullptr)	// 找到管理空间非空的span
 		{
 			return it;
 		}
@@ -25,11 +25,11 @@ Span* CentralCache::GetOneSpan(SpanList& list, size_t size)
 	// 走到这里没有空闲的span，找pageCache要
 	PageCache::GetInstance()->getPageMutex().lock();
 	Span* span = PageCache::GetInstance()->NewSpan(SizeClass::NumMovePage(size));
+	PageCache::GetInstance()->getPageMutex().unlock();
 
 	// 计算span的大块内存的起始地址和大块内存的大小（字节数）
 	char* start = (char*)(span->_pageID << PAGE_SHIFT);
-	size_t bytes = span->_n << PAGE_SHIFT;
-	char* end = start + bytes;
+	char* end = (char*)(start + (span->_n << PAGE_SHIFT));
 
 	// 把大块内存切成自由链表链接起来
 	// 先切下来一块去做头节点，方便尾插
@@ -66,16 +66,18 @@ size_t CentralCache::FetchRangeObj(void*& start, void*& end, size_t batchNum, si
 	start = span->_freeList;
 	end = start;
 	size_t i = 0;
-	size_t actualNum = 1;
+	size_t actualNum = 1;	// 函数实际的返回值
 	while(i < batchNum - 1 && NextObj(end) != nullptr)
 	{
 		end = NextObj(end);
+		++actualNum;
 		++i; 
 	}
+	// 将[start, end]返回给threadCache后，调整Span的_freeList
 	span->_freeList = NextObj(end);
-	NextObj(end) = nullptr;
+	NextObj(end) = nullptr;		//end的next要指向空,不要和原先Span的_freeList中的块相连
 
-	span->_useCount += actualNum;
+	//span->_useCount += actualNum;
 
 	_spanLists[index]._mtx.unlock();
 

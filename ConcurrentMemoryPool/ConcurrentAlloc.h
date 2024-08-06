@@ -4,7 +4,7 @@
 #include "ThreadCache.h"
 #include "PageCache.h"
 
-
+// 线程调用这个函数申请空间
 static void* ConcurrentAlloc(size_t size)
 {
 	if (size > MAX_BYTES)
@@ -24,7 +24,9 @@ static void* ConcurrentAlloc(size_t size)
 	{
 		if (pTLSThreadCache == nullptr)
 		{
-			// pTLSThreadCache = new ThreadCache;
+			// pTLSThreadCache = new ThreadCache
+			// 此时就相当于每个线程都有一个ThreadCache对象
+
 			static ObjectPool<ThreadCache> tcpool;
 			pTLSThreadCache = tcpool.New();
 		}
@@ -36,6 +38,7 @@ static void* ConcurrentAlloc(size_t size)
 	
 }
 
+// 线程调用这个函数来回收空间
 static void* ConcurrentFree(void* ptr,size_t size)
 {
 	assert(pTLSThreadCache);

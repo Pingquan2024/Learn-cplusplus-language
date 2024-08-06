@@ -13,6 +13,7 @@ void* ThreadCache::Allocate(size_t size)
 
 	if (!_freeLists[index].Empty())
 	{
+		// 自由链表不为空，可以直接从自由链表中获取空间
 		return _freeLists[index].Pop();
 	}
 	else
@@ -23,6 +24,7 @@ void* ThreadCache::Allocate(size_t size)
 
 void ThreadCache::Deallocate(void* ptr, size_t size)
 {
+	// 回收线程中大小为size的obj空间
 	assert(ptr);
 	assert(size <= MAX_BYTES);
 
@@ -37,10 +39,16 @@ void ThreadCache::Deallocate(void* ptr, size_t size)
 	}
 }
 
+// ThreadCache中空间不够时，像CentralCache申请空间的接口
 void* ThreadCache::FetchFromCentralCache(size_t index, size_t size)
 {
 	// 慢开始反馈调节算法
-	size_t batchNum = min(_freeLists[index].MaxSize(),SizeClass::NumMoveSize(size));
+#ifdef WIN32
+	size_t batchNum = min(_freeLists[index].MaxSize(), SizeClass::NumMoveSize(size));
+#else
+	size_t batchNum = std::min(_freeLists[index].MaxSize(), SizeClass::NumMoveSize(size));
+#endif
+
 	if (_freeLists[index].MaxSize() == batchNum)
 	{
 		_freeLists[index].MaxSize() += 1;
@@ -61,7 +69,7 @@ void* ThreadCache::FetchFromCentralCache(size_t index, size_t size)
 	}
 	else
 	{
-		_freeLists[index].PushRange(NextObj(start), end);
+		_freeLists[index].PushRange(NextObj(start), end, actualNum);
 		return start;
 	}
 }
