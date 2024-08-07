@@ -2,6 +2,7 @@
 #include "ObjectPool.h"
 //#include "ConcurrentAlloc.h"
 
+# if 0
 struct TreeNode
 {
 	TreeNode* _left;
@@ -71,6 +72,7 @@ void TestObjectPool()
 	cout << "malloc and free time:" << end1 - begin1 << endl;	// µ¥Î»ms
 	cout << "object pool time:" << end2 - begin2 << endl;
 }
+#endif
 
 //void Alloc1()
 //{
@@ -108,7 +110,7 @@ void TestObjectPool()
 
 int main()
 {
-	TestObjectPool();
+	//TestObjectPool();
 	//TLSTest();
 
 	//TestConcurrentAlloc();

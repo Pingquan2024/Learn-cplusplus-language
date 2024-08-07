@@ -69,7 +69,7 @@ void* ThreadCache::FetchFromCentralCache(size_t index, size_t size)
 	}
 	else
 	{
-		_freeLists[index].PushRange(NextObj(start), end, actualNum);
+		_freeLists[index].PushRange(NextObj(start), end, actualNum - 1);
 		return start;
 	}
 }

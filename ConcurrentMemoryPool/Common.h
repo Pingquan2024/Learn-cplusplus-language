@@ -62,7 +62,7 @@ public:
 		++_size;
 	}
 
-	void PushRange(void*start, void* end,size_t n)
+	void PushRange(void*start, void* end, size_t n)
 	{
 		NextObj(end) = _freeList;
 		_freeList = start;
@@ -115,7 +115,7 @@ public:
 private:
 	void* _freeList = nullptr;	// 哈希桶中每个桶是一个自由链表
 
-	size_t _size = 0;
+	size_t _size = 0;			// 当前自由链表中有多少块空间
 	size_t _maxSize = 1;
 };
 
@@ -285,7 +285,11 @@ public:
 
 	size_t _useCount;		// 切好小块内存，被分配给thread cache的计数
 	void* _freeList;        // 每个span下面挂的小块空间的头节点
-	size_t _objSize;
+	size_t _objSize;	
+
+	bool _isUse = false;	// 判断当前span是在centralCache还是pageCache中
+	// false就表示这个span当前没有被使用，那么就是在pc中，true就是被使用了，那么就在cc中
+
 private:
 	size_t _maxSize;		// 当前自由链表申请未达到上限时，能够申请的最大空间是多少
 };

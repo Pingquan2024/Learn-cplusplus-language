@@ -1,4 +1,5 @@
 #include "PageCache.h"
+#include "Common.h"
 
 PageCache PageCache::_sInst;	// 单例对象
 
@@ -12,7 +13,16 @@ Span* PageCache::NewSpan(size_t k)
 	// 先检查第k个桶里面有没有span
 	if (!_SpanLists[k].Empty())
 	{
-		return _SpanLists->PopFront();
+		Span* span =  _SpanLists->PopFront();
+
+		// 记录分配出去的span管理的页号和其地址的映射关系
+		for (PAGE_ID i = 0; i < span->_n; i++)
+		{
+			// i是Page_ID类型，不然在64位下和_pageID相加会报警告
+			_idSpanMap[span->_pageID + i] = span;
+		}
+
+		return span;
 	}
 
 	// 检查一下后面的桶里有没有span，如果有则进行切分
@@ -36,6 +46,18 @@ Span* PageCache::NewSpan(size_t k)
 			nSpan->_n -= k;
 			_SpanLists[nSpan->_n].PushFront(nSpan);
 
+			// 再把n-k页的span边缘页映射一下，方便后续合并
+			_idSpanMap[nSpan->_pageID] = nSpan;
+			_idSpanMap[nSpan->_pageID + nSpan->_n - 1] = nSpan;
+
+
+			// 记录分配出去的span管理的页号和其地址的映射关系
+			for (PAGE_ID i = 0; i < kSpan->_n; i++)
+			{
+				// i是Page_ID类型，不然在64位下和_pageID相加会报警告
+				_idSpanMap[kSpan->_pageID + i] = kSpan;
+			}
+
 			return kSpan;
 		}
 	}
@@ -51,4 +73,101 @@ Span* PageCache::NewSpan(size_t k)
 
 	// 递归再次申请k页的span，这次递归一定会走 k号桶没有span，但后面的桶中有span
 	return NewSpan(k);	// 复用代码
+}
+
+// 通过地址找到span
+Span* PageCache::MapObjectToSpan(void* obj)
+{
+	PAGE_ID id = (((PAGE_ID)obj) >> PAGE_SHIFT);
+
+	// 通过哈希找到页号对应的span
+	auto ret = _idSpanMap.find(id);
+
+	if (ret != _idSpanMap.end())
+	{
+		return ret->second;
+	}
+	else
+	{
+		assert(false);
+		return nullptr;
+	}
+}
+
+
+void PageCache::ReleaseSpanToPageCache(Span* span) 
+{
+	// 向左不断合并
+	while(true)
+	{
+		PAGE_ID leftID = span->_pageID - 1;
+		auto ret = _idSpanMap.find(leftID);
+
+		// 没有相邻span停止合并
+		if (ret == _idSpanMap.end())
+		{
+			break;
+		}
+
+		Span* leftSpan = ret->second;
+		// 相邻span在centralCache中，停止合并
+		if (leftSpan->_isUse == true)
+		{
+			break;
+		}
+
+		//相邻span与当前span合并后超过128页，停止合并
+		if (leftSpan->_n + span->_n > PAGE_SHIFT)
+		{
+			break;
+		}
+
+		// 当前span与相邻span进行合并
+		span->_pageID = leftSpan->_pageID;
+		span->_n += leftSpan->_n;
+
+		_SpanLists[leftSpan->_n].Erase(leftSpan);	// 将相邻对象从桶中删除
+		delete leftSpan;
+	}
+
+	// 向右不断合并
+	while(true)
+	{
+		PAGE_ID rightID = span->_pageID + span->_n;
+		auto it = _idSpanMap.find(rightID);
+
+		// 没有相邻span停止合并
+		if (it == _idSpanMap.end())
+		{
+			break;
+		}
+
+		Span* rightSpan = it->second;
+		// 相邻span在centralCache中，停止合并
+		if (rightSpan->_isUse == true)
+		{
+			break;
+		}
+
+		//相邻span与当前span合并后超过128页，停止合并
+		if (rightSpan->_n + span->_n > PAGE_SHIFT - 1)
+		{
+			break;
+		}
+
+		// 当前span与相邻span进行合并
+		span->_n += rightSpan->_n;
+
+		_SpanLists[rightSpan->_n].Erase(rightSpan);	// 将相邻对象从桶中删除
+		delete rightSpan;
+	}
+
+	// 合共完毕，将当前span挂在对应桶中
+	_SpanLists[span->_n].PushFront(span);
+	span->_isUse = false;	// 从cc返回到pc，isUse改成false
+
+	// 映射当前span的边缘页，后续还可以对这个span合并
+	_idSpanMap[span->_pageID] = span;
+	_idSpanMap[span->_pageID + span->_n - 1] = span;
+
 }

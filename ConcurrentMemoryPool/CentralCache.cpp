@@ -25,6 +25,7 @@ Span* CentralCache::GetOneSpan(SpanList& list, size_t size)
 	// 走到这里没有空闲的span，找pageCache要
 	PageCache::GetInstance()->getPageMutex().lock();
 	Span* span = PageCache::GetInstance()->NewSpan(SizeClass::NumMovePage(size));
+	span->_isUse = true;
 	PageCache::GetInstance()->getPageMutex().unlock();
 
 	// 计算span的大块内存的起始地址和大块内存的大小（字节数）
@@ -77,7 +78,7 @@ size_t CentralCache::FetchRangeObj(void*& start, void*& end, size_t batchNum, si
 	span->_freeList = NextObj(end);
 	NextObj(end) = nullptr;		//end的next要指向空,不要和原先Span的_freeList中的块相连
 
-	//span->_useCount += actualNum;
+	span->_useCount += actualNum;
 
 	_spanLists[index]._mtx.unlock();
 
@@ -88,11 +89,13 @@ void CentralCache::ReleaseListToSpans(void* start, size_t size)
 {
 	size_t index = SizeClass::Index(size);
 	_spanLists[index]._mtx.lock();
+
 	while (start)
 	{
 		void* next = NextObj(start);
 
 		Span* span = PageCache::GetInstance()->MapObjectToSpan(start);
+		// 把当前块插入到对应span中
 		NextObj(start) = span->_freeList;
 		span->_freeList = start;
 		span->_useCount--;
@@ -102,7 +105,7 @@ void CentralCache::ReleaseListToSpans(void* start, size_t size)
 		if (span->_useCount == 0)
 		{
 			_spanLists[index].Erase(span);
-			span->_freeList = nullptr;
+			span->_freeList = nullptr;	// 将这个span在centralCache对应哈希桶桶删掉
 			span->_next = nullptr;
 			span->_prev = nullptr;
 
@@ -110,9 +113,9 @@ void CentralCache::ReleaseListToSpans(void* start, size_t size)
 			// 这时把桶锁解掉
 			_spanLists[index]._mtx.unlock();
 
-			PageCache::GetInstance()->_pageMtx.lock();
+			PageCache::GetInstance()->getPageMutex().lock();
 			PageCache::GetInstance()->ReleaseSpanToPageCache(span);
-			PageCache::GetInstance()->_pageMtx.unlock();
+			PageCache::GetInstance()->getPageMutex().unlock();
 
 			_spanLists[index]._mtx.lock();
 		}
