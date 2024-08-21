@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include <vector>
 #include <algorithm>
 
@@ -29,7 +30,7 @@ public:
 
 void TestMovezeroes()
 {
-	std::vector<int> nums{ 0,1,0,3,12 };
+	std::vector<int> nums { 0,1,0,3,12 };
 	Solution01().moveZeroes(nums);
 
 	for (int e : nums)
@@ -258,6 +259,71 @@ void TestThreeSum()
 
 }
 
+class Solution07
+{
+public:
+	std::vector<std::vector<int>> fourSum(std::vector<int>& nums, int target)
+	{
+		sort(nums.begin(), nums.end());
+
+		std::vector<std::vector<int>> ve;
+		for (int i = 0; i < nums.size(); )
+		{
+			// 固定了a
+			for (int j = i + 1; j < nums.size();)
+			{
+				// 固定了b
+				int left = j + 1, right = nums.size() - 1;
+				long long targetTmp = (long long)target - nums[i] - nums[j];
+				while (left < right)
+				{
+					int sum = nums[left] + nums[right];
+					if (sum > targetTmp)
+					{
+						right--;
+					}
+					else if (sum < targetTmp)
+					{
+						left++;
+					}
+					else
+					{
+						// 相等,然后去重
+						ve.push_back({ nums[i], nums[j], nums[left++], nums[right--] });
+						while (left < right && nums[left] == nums[left - 1]) left++;
+						while (left < right && nums[right] == nums[right + 1]) right--;
+					}
+				}
+				j++;
+				while (j < nums.size() && nums[j] == nums[j - 1]) j++;
+			}
+			i++;
+			while (i < nums.size() && nums[i] == nums[i - 1]) i++;
+		}
+		return ve;
+	}
+};
+
+
+void TestFourSum()
+{
+	std::vector<int> arr{ 1,0,-1,0,-2,2 };
+	int target = 0;
+	std::vector<std::vector<int>> ret = Solution07().fourSum(arr, target);
+
+		for (auto e : ret)
+		{
+			for (auto number : e)
+			{
+				std::cout << number << " ";
+			}
+			std::cout << std::endl;
+		}
+
+}
+
+
+#if 0
 int main()
 {
 	// TestMovezeroes();
@@ -270,7 +336,10 @@ int main()
 
 	// TestTwoSum();
 
-	TestThreeSum();
+	// TestThreeSum();
+
+	TestFourSum();
 
 	return 0;
 }
+#endif
