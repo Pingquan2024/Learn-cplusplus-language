@@ -1,6 +1,7 @@
 #include <vector>
+#include "ThreadCache.h"
 #include "ObjectPool.h"
-//#include "ConcurrentAlloc.h"
+#include "ConcurrentAlloc.h"
 
 # if 0
 struct TreeNode
@@ -99,21 +100,35 @@ void TestObjectPool()
 //	std::thread t2(Alloc2);
 //	t2.join();
 //}
-//
-//void TestConcurrentAlloc()
-//{
-//	ConcurrentAlloc(6);
-//	ConcurrentAlloc(6);
-//	ConcurrentAlloc(6);
-//	ConcurrentAlloc(6);
-//}
+
+void TestConcurrentFree1()
+{
+	void* ptr1 = ConcurrentAlloc(5);
+	void* ptr2 = ConcurrentAlloc(8);
+	void* ptr3 = ConcurrentAlloc(4);
+	void* ptr4 = ConcurrentAlloc(6);
+	void* ptr5 = ConcurrentAlloc(38);
+
+	cout << ptr1 << endl;
+	cout << ptr2 << endl;
+	cout << ptr3 << endl;
+	cout << ptr4 << endl;
+
+	ConcurrentFree(ptr1, 5);
+	ConcurrentFree(ptr2, 8);
+	ConcurrentFree(ptr3, 4);
+	ConcurrentFree(ptr4, 6);
+	ConcurrentFree(ptr4, 38);
+}
 
 int main()
 {
 	//TestObjectPool();
 	//TLSTest();
 
-	//TestConcurrentAlloc();
+	TestConcurrentFree1();
+
+	//ThreadCache().Allocate(5);
 
 	return 0;
 }

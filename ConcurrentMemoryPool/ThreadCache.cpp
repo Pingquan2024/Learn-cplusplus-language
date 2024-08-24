@@ -45,12 +45,15 @@ void* ThreadCache::FetchFromCentralCache(size_t index, size_t size)
 	// 慢开始反馈调节算法
 #ifdef WIN32
 	size_t batchNum = min(_freeLists[index].MaxSize(), SizeClass::NumMoveSize(size));
+	// MaxSize表示index位置的自由链表单次申请未到上限时，能够申请的最大块空间是多少(一块能申请多大)
+	// NumMoveSize表示tc单次向cc申请alignSize大小的空间块的最多块数是多少(最多能申请几块)
 #else
 	size_t batchNum = std::min(_freeLists[index].MaxSize(), SizeClass::NumMoveSize(size));
 #endif
 
 	if (_freeLists[index].MaxSize() == batchNum)
 	{
+		// 如果没有达到上限，那下次再申请这样的空间的时候可以再多申请一块
 		_freeLists[index].MaxSize() += 1;
 	}
 

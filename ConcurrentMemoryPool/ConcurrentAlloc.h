@@ -45,5 +45,6 @@ static void* ConcurrentFree(void* ptr,size_t size)
 
 	pTLSThreadCache->Deallocate(ptr,size);
 
+	return nullptr;
 }
 

@@ -116,7 +116,7 @@ private:
 	void* _freeList = nullptr;	// 哈希桶中每个桶是一个自由链表
 
 	size_t _size = 0;			// 当前自由链表中有多少块空间
-	size_t _maxSize = 1;
+	size_t _maxSize = 1;		// 表示未达到上限时当前能够申请的最大块空间是多少
 };
 
 // 计算对象大小的对齐映射规则
@@ -246,7 +246,7 @@ public:
 	static size_t NumMovePage(size_t size)	
 	{
 		size_t num = NumMoveSize(size);	 //NumMoveSize是算出threadCache向centralCache申请size大小的块时的单次最大申请块数
-		size_t npage = num * size;	// 单词申请最大空间的大小
+		size_t npage = num * size;	// 单次申请最大空间的大小
 
 		// PAGE_SHIFT表示一页要占用多少位，比如一页8kb就是13位，这里右移就是除于页大小，算出来就是单次申请最大空间有多少页
 		npage >>= PAGE_SHIFT;

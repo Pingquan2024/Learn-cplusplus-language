@@ -47,6 +47,8 @@ Span* CentralCache::GetOneSpan(SpanList& list, size_t size)
 
 	NextObj(tail) = nullptr;
 
+	// 切好span之后，需要把span挂到centralCache对应下标的桶里面去
+	list._mtx.lock();
 	list.PushFront(span);
 
 	return span;
