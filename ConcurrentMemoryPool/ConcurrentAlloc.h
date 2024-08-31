@@ -3,6 +3,7 @@
 #include "Common.h"
 #include "ThreadCache.h"
 #include "PageCache.h"
+#include "ObjectPool.h"
 
 // 线程调用这个函数申请空间
 static void* ConcurrentAlloc(size_t size)
@@ -39,12 +40,24 @@ static void* ConcurrentAlloc(size_t size)
 }
 
 // 线程调用这个函数来回收空间
-static void* ConcurrentFree(void* ptr,size_t size)
+void ConcurrentFree(void* ptr)
 {
-	assert(pTLSThreadCache);
+	assert(ptr);
 
-	pTLSThreadCache->Deallocate(ptr,size);
+	// 通过ptr找到对应的span,因为前面申请空间的时候已经保证了维护的空间首页地址已经映射过了
+	Span* span = PageCache::GetInstance()->MapObjectToSpan(ptr);
+	size_t size = span->_objSize;	// 通过映射来的span获取ptr所指空间大小
 
-	return nullptr;
+	// 通过size来判断是不是大于256kb的,是了就走pthreadCache
+	if (size > MAX_BYTES)
+	{
+		PageCache::GetInstance()->getPageMutex().lock();
+		PageCache::GetInstance()->ReleaseSpanToPageCache(span);	//直接通过span释放空间
+		PageCache::GetInstance()->getPageMutex().unlock();
+	}
+	else
+	{
+		pTLSThreadCache->Deallocate(ptr, size);
+	}
 }
 

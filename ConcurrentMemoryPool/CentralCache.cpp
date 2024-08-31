@@ -25,7 +25,8 @@ Span* CentralCache::GetOneSpan(SpanList& list, size_t size)
 	// 走到这里没有空闲的span，找pageCache要
 	PageCache::GetInstance()->getPageMutex().lock();
 	Span* span = PageCache::GetInstance()->NewSpan(SizeClass::NumMovePage(size));
-	span->_isUse = true;
+	span->_isUse = true;	// centralCache获取到了pthreadCache中的span,改成正在使用
+	span->_objSize = size;	// 记录span被切分的块有多大
 	PageCache::GetInstance()->getPageMutex().unlock();
 
 	// 计算span的大块内存的起始地址和大块内存的大小（字节数）

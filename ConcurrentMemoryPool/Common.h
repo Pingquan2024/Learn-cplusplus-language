@@ -285,7 +285,7 @@ public:
 
 	size_t _useCount;		// 切好小块内存，被分配给thread cache的计数
 	void* _freeList;        // 每个span下面挂的小块空间的头节点
-	size_t _objSize;	
+	size_t _objSize;		// span管理页被切分成的块有多大
 
 	bool _isUse = false;	// 判断当前span是在centralCache还是pageCache中
 	// false就表示这个span当前没有被使用，那么就是在pc中，true就是被使用了，那么就在cc中

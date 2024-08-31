@@ -80,6 +80,8 @@ Span* PageCache::MapObjectToSpan(void* obj)
 {
 	PAGE_ID id = (((PAGE_ID)obj) >> PAGE_SHIFT);
 
+	// 智能锁
+	std::unique_lock<std::mutex> lc(PageCache().getPageMutex());
 	// 通过哈希找到页号对应的span
 	auto ret = _idSpanMap.find(id);
 
