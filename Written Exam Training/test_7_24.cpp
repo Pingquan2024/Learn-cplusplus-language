@@ -1,3 +1,5 @@
+/* ×Ö·û´®Ìæ»» */
+
 //#include <iostream>
 //#include <vector>
 //
@@ -56,6 +58,43 @@
 //}
 
 
+/* ×Ö·û´®Ìæ»» */
+//class StringFormat
+//{
+//public:
+//    string formatString(string A, int n, vector<char> arg, int m)
+//    {
+//        int j = 0;
+//        string ret;
+//
+//        for (int i = 0; i < n; i++)
+//        {
+//            if (A[i] == '%')
+//            {
+//                if (i + 1 < n && A[i + 1] == 's')
+//                {
+//                    ret += arg[j++];
+//                    i++;
+//                }
+//                else
+//                {
+//                    ret += A[i];
+//                }
+//            }
+//            else
+//            {
+//                ret += A[i];
+//            }
+//        }
+//
+//        while (j < m)
+//        {
+//            ret += arg[j++];
+//        }
+//
+//        return ret;
+//    }
+//};
 
 //#include <iostream>
 //#include <string>
