@@ -1,4 +1,4 @@
-/* 最小公倍数 */
+/* 最小公倍数*/
 //#include <iostream>
 //
 //using namespace std;
